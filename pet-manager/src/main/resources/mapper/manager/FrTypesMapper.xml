@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.manager.mapper.FrTypesMapper">
+
+    <resultMap type="FrTypes" id="FrTypesResult">
+        <result property="roomTypeId"    column="room_type_id"    />
+        <result property="roomType"    column="room_type"    />
+        <result property="roomNumber"    column="room_number"    />
+        <result property="maxPetsPerRoom"    column="max_pets_per_room"    />
+    </resultMap>
+
+    <sql id="selectFrTypesVo">
+        select room_type_id, room_type, room_number, max_pets_per_room from tb_foster_room_types
+    </sql>
+
+    <select id="selectFrTypesList" parameterType="FrTypes" resultMap="FrTypesResult">
+        <include refid="selectFrTypesVo"/>
+        <where>
+            <if test="roomType != null  and roomType != ''"> and room_type = #{roomType}</if>
+            <if test="roomNumber != null "> and room_number = #{roomNumber}</if>
+        </where>
+    </select>
+
+    <select id="selectFrTypesByRoomTypeId" parameterType="Long" resultMap="FrTypesResult">
+        <include refid="selectFrTypesVo"/>
+        where room_type_id = #{roomTypeId}
+    </select>
+    <select id="selectFrTypesByRoomNumber" parameterType="Long" resultMap="FrTypesResult">
+        <include refid="selectFrTypesVo"/>
+        where room_number = #{roomNumber}
+    </select>
+
+    <insert id="insertFrTypes" parameterType="FrTypes" useGeneratedKeys="true" keyProperty="roomTypeId">
+        insert into tb_foster_room_types
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomType != null and roomType != ''">room_type,</if>
+            <if test="roomNumber != null">room_number,</if>
+            <if test="maxPetsPerRoom != null">max_pets_per_room,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomType != null and roomType != ''">#{roomType},</if>
+            <if test="roomNumber != null">#{roomNumber},</if>
+            <if test="maxPetsPerRoom != null">#{maxPetsPerRoom},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFrTypes" parameterType="FrTypes">
+        update tb_foster_room_types
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomType != null and roomType != ''">room_type = #{roomType},</if>
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="maxPetsPerRoom != null">max_pets_per_room = #{maxPetsPerRoom},</if>
+        </trim>
+        where room_type_id = #{roomTypeId}
+    </update>
+
+    <delete id="deleteFrTypesByRoomTypeId" parameterType="Long">
+        delete from tb_foster_room_types where room_type_id = #{roomTypeId}
+    </delete>
+
+    <delete id="deleteFrTypesByRoomTypeIds" parameterType="String">
+        delete from tb_foster_room_types where room_type_id in
+        <foreach item="roomTypeId" collection="array" open="(" separator="," close=")">
+            #{roomTypeId}
+        </foreach>
+    </delete>
+</mapper>

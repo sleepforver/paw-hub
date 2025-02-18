@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.manager.mapper.PetsMapper">
+
+    <resultMap type="Pets" id="PetsResult">
+        <result property="petId"    column="pet_id"    />
+        <result property="petName"    column="pet_name"    />
+        <result property="species"    column="species"    />
+        <result property="breed"    column="breed"    />
+        <result property="age"    column="age"    />
+        <result property="gender"    column="gender"    />
+        <result property="petImageUrl"    column="pet_image_url"    />
+        <result property="vaccinationRecord"    column="vaccination_record"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+
+    <sql id="selectPetsVo">
+        select pet_id, pet_name, species, breed, age, gender, pet_image_url, vaccination_record, user_id, created_at, created_by, updated_at, updated_by from tb_pets
+    </sql>
+
+    <select id="selectPetsList" parameterType="Pets" resultMap="PetsResult">
+        <include refid="selectPetsVo"/>
+        <where>
+            <if test="petName != null  and petName != ''"> and pet_name like concat('%', #{petName}, '%')</if>
+            <if test="species != null  and species != ''"> and species = #{species}</if>
+            <if test="breed != null  and breed != ''"> and breed = #{breed}</if>
+            <if test="vaccinationRecord != null  and vaccinationRecord != ''"> and vaccination_record = #{vaccinationRecord}</if>
+            <if test="userId != null and userId != ''"> and user_id = #{userId}</if>
+        </where>
+    </select>
+
+    <select id="selectPetsByPetId" parameterType="Long" resultMap="PetsResult">
+        <include refid="selectPetsVo"/>
+        where pet_id = #{petId}
+    </select>
+
+    <insert id="insertPets" parameterType="Pets" useGeneratedKeys="true" keyProperty="petId">
+        insert into tb_pets
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="petName != null and petName != ''">pet_name,</if>
+            <if test="species != null and species != ''">species,</if>
+            <if test="breed != null and breed != ''">breed,</if>
+            <if test="age != null">age,</if>
+            <if test="gender != null and gender != ''">gender,</if>
+            <if test="petImageUrl != null and petImageUrl != ''">pet_image_url,</if>
+            <if test="vaccinationRecord != null and vaccinationRecord != ''">vaccination_record,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="updatedBy != null">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="petName != null and petName != ''">#{petName},</if>
+            <if test="species != null and species != ''">#{species},</if>
+            <if test="breed != null and breed != ''">#{breed},</if>
+            <if test="age != null">#{age},</if>
+            <if test="gender != null and gender != ''">#{gender},</if>
+            <if test="petImageUrl != null and petImageUrl != ''">#{petImageUrl},</if>
+            <if test="vaccinationRecord != null and vaccinationRecord != ''">#{vaccinationRecord},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="updatedBy != null">#{updatedBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePets" parameterType="Pets">
+        update tb_pets
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="petName != null and petName != ''">pet_name = #{petName},</if>
+            <if test="species != null and species != ''">species = #{species},</if>
+            <if test="breed != null and breed != ''">breed = #{breed},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="gender != null and gender != ''">gender = #{gender},</if>
+            <if test="petImageUrl != null and petImageUrl != ''">pet_image_url = #{petImageUrl},</if>
+            <if test="vaccinationRecord != null and vaccinationRecord != ''">vaccination_record = #{vaccinationRecordUrl},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="updatedBy != null">updated_by = #{updatedBy},</if>
+        </trim>
+        where pet_id = #{petId}
+    </update>
+
+    <delete id="deletePetsByPetId" parameterType="Long">
+        delete from tb_pets where pet_id = #{petId}
+    </delete>
+
+    <delete id="deletePetsByPetIds" parameterType="String">
+        delete from tb_pets where pet_id in
+        <foreach item="petId" collection="array" open="(" separator="," close=")">
+            #{petId}
+        </foreach>
+    </delete>
+</mapper>

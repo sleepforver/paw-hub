@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.manager.mapper.FosterRoomsMapper">
+
+    <resultMap type="FosterRooms" id="FosterRoomsResult">
+        <result property="fosterRoomId"    column="foster_room_id"    />
+        <result property="roomNumber"    column="room_number"    />
+        <result property="roomImage"    column="room_image"    />
+        <result property="roomType"    column="room_type"    />
+        <result property="brandName"    column="brand_name"    />
+        <result property="maxPetsPerRoom"    column="max_pets_per_room"    />
+        <result property="currentPetsCount"    column="current_pets_count"    />
+        <result property="isAvailable"    column="is_available"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectFosterRoomsVo">
+        select foster_room_id, room_number, room_image, room_type, brand_name, max_pets_per_room, current_pets_count, is_available, create_time from tb_foster_rooms
+    </sql>
+
+    <select id="selectFosterRoomsList" parameterType="FosterRooms" resultMap="FosterRoomsResult">
+        <include refid="selectFosterRoomsVo"/>
+        <where>
+            <if test="roomNumber != null "> and room_number = #{roomNumber}</if>
+            <if test="roomType != null  and roomType != ''"> and room_type = #{roomType}</if>
+            <if test="brandName != null  and brandName != ''"> and brand_name like concat('%', #{brandName}, '%')</if>
+            <if test="isAvailable != null "> and is_available = #{isAvailable}</if>
+        </where>
+    </select>
+
+    <select id="selectFosterRoomsByFosterRoomId" parameterType="Long" resultMap="FosterRoomsResult">
+        <include refid="selectFosterRoomsVo"/>
+        where foster_room_id = #{fosterRoomId}
+    </select>
+
+    <insert id="insertFosterRooms" parameterType="FosterRooms" useGeneratedKeys="true" keyProperty="fosterRoomId">
+        insert into tb_foster_rooms
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roomNumber != null">room_number,</if>
+            <if test="roomImage != null and roomImage != ''">room_image,</if>
+            <if test="roomType != null and roomType != ''">room_type,</if>
+            <if test="brandName != null and brandName != ''">brand_name,</if>
+            <if test="maxPetsPerRoom != null">max_pets_per_room,</if>
+            <if test="currentPetsCount != null">current_pets_count,</if>
+            <if test="isAvailable != null">is_available,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roomNumber != null">#{roomNumber},</if>
+            <if test="roomImage != null and roomImage != ''">#{roomImage},</if>
+            <if test="roomType != null and roomType != ''">#{roomType},</if>
+            <if test="brandName != null and brandName != ''">#{brandName},</if>
+            <if test="maxPetsPerRoom != null">#{maxPetsPerRoom},</if>
+            <if test="currentPetsCount != null">#{currentPetsCount},</if>
+            <if test="isAvailable != null">#{isAvailable},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+    <insert id="insertFrBatch" parameterType="java.util.List">
+        insert into tb_foster_rooms
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+             room_number, room_image, room_type, brand_name, is_available
+         </trim>
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.roomNumber}, #{item.roomImage}, #{item.roomType}, #{item.brandName}, #{item.isAvailable}
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateFosterRooms" parameterType="FosterRooms">
+        update tb_foster_rooms
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="roomImage != null and roomImage != ''">room_image = #{roomImage},</if>
+            <if test="roomType != null and roomType != ''">room_type = #{roomType},</if>
+            <if test="brandName != null and brandName != ''">brand_name = #{brandName},</if>
+            <if test="maxPetsPerRoom != null">max_pets_per_room = #{maxPetsPerRoom},</if>
+            <if test="currentPetsCount != null">current_pets_count = #{currentPetsCount},</if>
+            <if test="isAvailable != null">is_available = #{isAvailable},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where foster_room_id = #{fosterRoomId}
+    </update>
+
+    <delete id="deleteFosterRoomsByFosterRoomId" parameterType="Long">
+        delete from tb_foster_rooms where foster_room_id = #{fosterRoomId}
+    </delete>
+
+    <delete id="deleteFosterRoomsByFosterRoomIds" parameterType="String">
+        delete from tb_foster_rooms where foster_room_id in
+        <foreach item="fosterRoomId" collection="array" open="(" separator="," close=")">
+            #{fosterRoomId}
+        </foreach>
+    </delete>
+</mapper>

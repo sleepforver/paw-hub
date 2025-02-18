@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.manager.mapper.UsersMapper">
+    
+    <resultMap type="Users" id="UsersResult">
+        <result property="userId"    column="user_id"    />
+        <result property="username"    column="username"    />
+        <result property="passwordHash"    column="password_hash"    />
+        <result property="email"    column="email"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="address"    column="address"    />
+        <result property="avatarUrl"    column="avatar_url"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+
+    <sql id="selectUsersVo">
+        select user_id, username, password_hash, email, phone_number, address, avatar_url, created_at, created_by, updated_at, updated_by from tb_users
+    </sql>
+
+    <select id="selectUsersList" parameterType="Users" resultMap="UsersResult">
+        <include refid="selectUsersVo"/>
+        <where>  
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="phoneNumber != null  and phoneNumber != ''"> and phone_number like concat('%', #{phoneNumber}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectUsersByUserId" parameterType="Long" resultMap="UsersResult">
+        <include refid="selectUsersVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertUsers" parameterType="Users" useGeneratedKeys="true" keyProperty="userId">
+        insert into tb_users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">username,</if>
+            <if test="passwordHash != null and passwordHash != ''">password_hash,</if>
+            <if test="email != null and email != ''">email,</if>
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="avatarUrl != null and avatarUrl != ''">avatar_url,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="updatedBy != null">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="passwordHash != null and passwordHash != ''">#{passwordHash},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="phoneNumber != null and phoneNumber != ''">#{phoneNumber},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="avatarUrl != null and avatarUrl != ''">#{avatarUrl},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="updatedBy != null">#{updatedBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUsers" parameterType="Users">
+        update tb_users
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="passwordHash != null and passwordHash != ''">password_hash = #{passwordHash},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number = #{phoneNumber},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="avatarUrl != null and avatarUrl != ''">avatar_url = #{avatarUrl},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="updatedBy != null">updated_by = #{updatedBy},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteUsersByUserId" parameterType="Long">
+        delete from tb_users where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUsersByUserIds" parameterType="String">
+        delete from tb_users where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+</mapper>

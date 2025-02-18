@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.manager.mapper.BreedsMapper">
+    
+    <resultMap type="Breeds" id="BreedsResult">
+        <result property="breedId"    column="breed_id"    />
+        <result property="breedName"    column="breed_name"    />
+        <result property="species"    column="species"    />
+    </resultMap>
+
+    <sql id="selectBreedsVo">
+        select breed_id, breed_name, species from tb_breeds
+    </sql>
+
+    <select id="selectBreedsList" parameterType="Breeds" resultMap="BreedsResult">
+        <include refid="selectBreedsVo"/>
+        <where>  
+            <if test="breedName != null  and breedName != ''"> and breed_name like concat('%', #{breedName}, '%')</if>
+            <if test="species != null  and species != ''"> and species = #{species}</if>
+        </where>
+    </select>
+    
+    <select id="selectBreedsByBreedId" parameterType="Long" resultMap="BreedsResult">
+        <include refid="selectBreedsVo"/>
+        where breed_id = #{breedId}
+    </select>
+
+    <insert id="insertBreeds" parameterType="Breeds" useGeneratedKeys="true" keyProperty="breedId">
+        insert into tb_breeds
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="breedName != null and breedName != ''">breed_name,</if>
+            <if test="species != null and species != ''">species,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="breedName != null and breedName != ''">#{breedName},</if>
+            <if test="species != null and species != ''">#{species},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBreeds" parameterType="Breeds">
+        update tb_breeds
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="breedName != null and breedName != ''">breed_name = #{breedName},</if>
+            <if test="species != null and species != ''">species = #{species},</if>
+        </trim>
+        where breed_id = #{breedId}
+    </update>
+
+    <delete id="deleteBreedsByBreedId" parameterType="Long">
+        delete from tb_breeds where breed_id = #{breedId}
+    </delete>
+
+    <delete id="deleteBreedsByBreedIds" parameterType="String">
+        delete from tb_breeds where breed_id in 
+        <foreach item="breedId" collection="array" open="(" separator="," close=")">
+            #{breedId}
+        </foreach>
+    </delete>
+</mapper>
