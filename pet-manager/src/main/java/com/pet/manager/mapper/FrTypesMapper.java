@@ -65,4 +65,11 @@ public interface FrTypesMapper
      * @return
      */
     FrTypes selectFrTypesByRoomNumber(Long roomNumber);
+
+    /**
+     * 根据房间类型查询
+     * @param roomType
+     * @return
+     */
+    FrTypes selectFrTypesByRoomType(String roomType);
 }

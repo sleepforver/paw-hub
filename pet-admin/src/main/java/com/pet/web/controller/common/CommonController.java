@@ -1,9 +1,14 @@
 package com.pet.web.controller.common;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.dromara.x.file.storage.core.FileInfo;
+import org.dromara.x.file.storage.core.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +28,7 @@ import com.pet.framework.config.ServerConfig;
 
 /**
  * 通用请求处理
- * 
+ *
  * @author ruoyi
  */
 @RestController
@@ -37,9 +42,12 @@ public class CommonController
 
     private static final String FILE_DELIMETER = ",";
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     /**
      * 通用下载请求
-     * 
+     *
      * @param fileName 文件名称
      * @param delete 是否删除
      */
@@ -77,15 +85,22 @@ public class CommonController
     {
         try
         {
-            // 上传文件路径
+            /*// 上传文件路径
             String filePath = RuoYiConfig.getUploadPath();
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
-            String url = serverConfig.getUrl() + fileName;
+            String url = serverConfig.getUrl() + fileName;*/
+
+            // 指定oss保存文件路径 pawhub-images/2024/06/19/文件名
+            String objectName = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")) + "/";
+            // 上传图片，返回文件信息
+            FileInfo fileInfo = fileStorageService.of(file)
+                    .setPath(objectName)
+                    .upload();
             AjaxResult ajax = AjaxResult.success();
-            ajax.put("url", url);
-            ajax.put("fileName", fileName);
-            ajax.put("newFileName", FileUtils.getName(fileName));
+            ajax.put("url", fileInfo.getUrl());
+            ajax.put("fileName", fileInfo.getUrl()); // 注意：这里的值需要改为URL，因为前端的访问地址会做一个判断，如果以http开头就直接显示此图片
+            ajax.put("newFileName", fileInfo.getUrl());
             ajax.put("originalFilename", file.getOriginalFilename());
             return ajax;
         }

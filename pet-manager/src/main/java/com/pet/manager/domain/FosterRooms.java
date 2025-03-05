@@ -37,6 +37,10 @@ public class FosterRooms extends BaseEntity
                             @ExcelProperty(value = "房间号")
         private Long roomNumber;
 
+                            /** 员工id */
+                            @Excel(name = "员工id")
+        private Long empId;
+
                 /** 房间照片 */
                             @Excel(name = "房间照片")
                             @ExcelProperty(value = "房间照片")

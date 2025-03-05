@@ -2,6 +2,7 @@ package com.pet.manager.mapper;
 
 import java.util.List;
 import com.pet.manager.domain.FosterRooms;
+import com.pet.manager.domain.vo.FosterRoomsVo;
 
 /**
  * 寄养房间信息Mapper接口
@@ -65,4 +66,14 @@ public interface FosterRoomsMapper
      * @return
      */
     int insertFrBatch(List<FosterRooms> fosterRoomsList);
+
+
+    /**
+     * 根据房间编号查询房间信息
+     * @param roomNumber
+     * @return
+     */
+    FosterRooms selectFosterRoomsByRoomNumber(Long roomNumber);
+
+
 }

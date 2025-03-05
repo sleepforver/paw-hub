@@ -5,15 +5,15 @@ import com.pet.manager.domain.ServiceTypes;
 
 /**
  * 服务类型Mapper接口
- * 
+ *
  * @author kkk
  * @date 2025-02-17
  */
-public interface ServiceTypesMapper 
+public interface ServiceTypesMapper
 {
     /**
      * 查询服务类型
-     * 
+     *
      * @param serviceTypeId 服务类型主键
      * @return 服务类型
      */
@@ -21,7 +21,7 @@ public interface ServiceTypesMapper
 
     /**
      * 查询服务类型列表
-     * 
+     *
      * @param serviceTypes 服务类型
      * @return 服务类型集合
      */
@@ -29,7 +29,7 @@ public interface ServiceTypesMapper
 
     /**
      * 新增服务类型
-     * 
+     *
      * @param serviceTypes 服务类型
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface ServiceTypesMapper
 
     /**
      * 修改服务类型
-     * 
+     *
      * @param serviceTypes 服务类型
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface ServiceTypesMapper
 
     /**
      * 删除服务类型
-     * 
+     *
      * @param serviceTypeId 服务类型主键
      * @return 结果
      */
@@ -53,9 +53,16 @@ public interface ServiceTypesMapper
 
     /**
      * 批量删除服务类型
-     * 
+     *
      * @param serviceTypeIds 需要删除的数据主键集合
      * @return 结果
      */
     public int deleteServiceTypesByServiceTypeIds(Long[] serviceTypeIds);
+
+    /**
+     * 根据服务名称查询服务类型
+     * @param serviceName
+     * @return
+     */
+    ServiceTypes selectServiceTypesByServiceName(String serviceName);
 }

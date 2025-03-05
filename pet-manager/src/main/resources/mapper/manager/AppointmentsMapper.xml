@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.manager.mapper.AppointmentsMapper">
+
+    <resultMap type="Appointments" id="AppointmentsResult">
+        <result property="appointmentId"    column="appointment_id"    />
+        <result property="appointmentNo"    column="appointment_no"    />
+        <result property="petId"    column="pet_id"    />
+        <result property="serviceTypeId"    column="service_type_id"    />
+        <result property="empId" column="emp_id" />
+        <result property="roomType" column="room_type"/>
+        <result property="roomNumber"    column="room_number"    />
+        <result property="userId"    column="user_id"    />
+        <result property="appointmentDate"    column="appointment_date"    />
+        <result property="status"    column="status"    />
+        <result property="cancelInfo"    column="cancel_info"    />
+        <result property="addr"    column="addr"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+
+    <resultMap type="AppointmentsVo" id="AppointmentsVoResult">
+        <result property="appointmentId"    column="appointment_id"    />
+        <result property="appointmentNo"    column="appointment_no"    />
+        <result property="petId"    column="pet_id"    />
+        <result property="serviceTypeId"    column="service_type_id"    />
+        <result property="empId" column="emp_id" />
+        <result property="roomType" column="room_type"/>
+        <result property="roomNumber"    column="room_number"    />
+        <result property="userId"    column="user_id"    />
+        <result property="appointmentDate"    column="appointment_date"    />
+        <result property="status"    column="status"    />
+        <result property="cancelInfo"    column="cancel_info"    />
+        <result property="addr"    column="addr"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <association property="pets" javaType="Pets" column="pet_id"
+                     select="com.pet.manager.mapper.PetsMapper.selectPetsByPetId" />
+        <association property="users" javaType="Users" column="user_id"
+                     select="com.pet.manager.mapper.UsersMapper.selectUsersByUserId"/>
+        <association property="serviceTypes" javaType="ServiceTypes" column="service_type_id"
+                     select="com.pet.manager.mapper.ServiceTypesMapper.selectServiceTypesByServiceTypeId" />
+    </resultMap>
+
+    <sql id="selectAppointmentsVo">
+        select appointment_id, appointment_no, pet_id, service_type_id, emp_id, room_type, room_number,user_id, appointment_date, status, cancel_info, addr, created_at, created_by, updated_at, updated_by from tb_appointments
+    </sql>
+
+    <select id="selectAppointmentsList" parameterType="Appointments" resultMap="AppointmentsResult">
+        <include refid="selectAppointmentsVo"/>
+        <where>
+            <if test="appointmentNo != null">and appointment_no = #{appointmentNo},</if>
+            <if test="petId != null">and pet_id = #{petId}</if>
+            <if test="serviceTypeId != null">and service_type_id = #{serviceTypeId}</if>
+            <if test="empId != null">and emp_id = #{empId}</if>
+            <if test="roomType != null">and room_type = #{roomType}</if>
+            <if test="roomNumber != null">and room_number = #{roomNumber}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="appointmentDate != null">and appointment_date = #{appointmentDate}</if>
+            <if test="status != null">and status = #{status}</if>
+            <if test="cancelInfo != null">and cancel_info = #{cancelInfo}</if>
+            <if test="addr != null">and addr = #{addr}</if>
+            <if test="createdAt != null">and created_at = #{createdAt}</if>
+            <if test="createdBy != null">and created_by = #{createdBy}</if>
+            <if test="updatedAt != null">and updated_at = #{updatedAt}</if>
+            <if test="updatedBy != null">and updated_by = #{updatedBy}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"  >
+                AND date_format(created_at,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                AND date_format(created_at,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAppointmentsByAppointmentId" parameterType="Long" resultMap="AppointmentsResult">
+        <include refid="selectAppointmentsVo"/>
+        where appointment_id = #{appointmentId}
+    </select>
+    <select id="selectAppointmentsVoList" resultMap="AppointmentsVoResult">
+        <include refid="selectAppointmentsVo"/>
+        <where>
+            <if test="appointmentNo != null">and appointment_no = #{appointmentNo}</if>
+            <if test="petId != null">and pet_id = #{petId}</if>
+            <if test="serviceTypeId != null">and service_type_id = #{serviceTypeId}</if>
+            <if test="empId != null">and emp_id = #{empId}</if>
+            <if test="roomType != null">and room_type = #{roomType}</if>
+            <if test="roomNumber != null">and room_number = #{roomNumber}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="appointmentDate != null">and appointment_date = #{appointmentDate}</if>
+            <if test="status != null">and status = #{status}</if>
+            <if test="cancelInfo != null">and cancel_info = #{cancelInfo}</if>
+            <if test="addr != null">and addr = #{addr}</if>
+            <if test="createdAt != null">and created_at = #{createdAt}</if>
+            <if test="createdBy != null">and created_by = #{createdBy}</if>
+            <if test="updatedAt != null">and updated_at = #{updatedAt}</if>
+            <if test="updatedBy != null">and updated_by = #{updatedBy}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"  >
+                AND date_format(created_at,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                AND date_format(created_at,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertAppointments" parameterType="Appointments" useGeneratedKeys="true" keyProperty="appointmentId">
+        insert into tb_appointments
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="appointmentNo != null">appointment_no,</if>
+            <if test="petId != null">pet_id,</if>
+            <if test="serviceTypeId != null">service_type_id,</if>
+            <if test="empId != null">emp_id,</if>
+            <if test="roomType != null">room_type,</if>
+            <if test="roomNumber != null">room_number,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="appointmentDate != null">appointment_date,</if>
+            <if test="status != null">status,</if>
+            <if test="cancelInfo != null">cancel_info,</if>
+            <if test="addr != null">addr,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="updatedBy != null">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="appointmentNo != null">#{appointmentNo},</if>
+            <if test="petId != null">#{petId},</if>
+            <if test="serviceTypeId != null">#{serviceTypeId},</if>
+            <if test="empId != null">#{empId},</if>
+            <if test="roomType != null">#{roomType},</if>
+            <if test="roomNumber != null">#{roomNumber},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="appointmentDate != null">#{appointmentDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="cancelInfo != null">#{cancelInfo},</if>
+            <if test="addr != null">#{addr},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="updatedBy != null">#{updatedBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAppointments" parameterType="Appointments">
+        update tb_appointments
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="appointmentNo != null">appointment_no = #{appointmentNo},</if>
+            <if test="petId != null">pet_id = #{petId},</if>
+            <if test="serviceTypeId != null">service_type_id = #{serviceTypeId},</if>
+            <if test="empId != null">emp_id = #{empId},</if>
+            <if test="roomType != null">room_type = #{roomType},</if>
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="appointmentDate != null">appointment_date = #{appointmentDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="cancelInfo != null">cancel_info = #{cancelInfo},</if>
+            <if test="addr != null">addr = #{addr},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="updatedBy != null">updated_by = #{updatedBy},</if>
+        </trim>
+        where appointment_id = #{appointmentId}
+    </update>
+
+    <delete id="deleteAppointmentsByAppointmentId" parameterType="Long">
+        delete from tb_appointments where appointment_id = #{appointmentId}
+    </delete>
+
+    <delete id="deleteAppointmentsByAppointmentIds" parameterType="String">
+        delete from tb_appointments where appointment_id in
+        <foreach item="appointmentId" collection="array" open="(" separator="," close=")">
+            #{appointmentId}
+        </foreach>
+    </delete>
+</mapper>

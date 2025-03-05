@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="FosterRooms" id="FosterRoomsResult">
         <result property="fosterRoomId"    column="foster_room_id"    />
+        <result property="empId" column="emp_id" />
         <result property="roomNumber"    column="room_number"    />
         <result property="roomImage"    column="room_image"    />
         <result property="roomType"    column="room_type"    />
@@ -16,8 +17,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
     </resultMap>
 
+
     <sql id="selectFosterRoomsVo">
-        select foster_room_id, room_number, room_image, room_type, brand_name, max_pets_per_room, current_pets_count, is_available, create_time from tb_foster_rooms
+        select foster_room_id, emp_id, room_number, room_image, room_type, brand_name, max_pets_per_room, current_pets_count, is_available, create_time from tb_foster_rooms
     </sql>
 
     <select id="selectFosterRoomsList" parameterType="FosterRooms" resultMap="FosterRoomsResult">
@@ -35,9 +37,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where foster_room_id = #{fosterRoomId}
     </select>
 
+
+    <select id="selectFosterRoomsByRoomNumber" parameterType="Long" resultMap="FosterRoomsResult">
+        <include refid="selectFosterRoomsVo"/>
+        where room_number = #{roomNumber}
+    </select>
+
     <insert id="insertFosterRooms" parameterType="FosterRooms" useGeneratedKeys="true" keyProperty="fosterRoomId">
         insert into tb_foster_rooms
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="empId != null">emp_id,</if>
             <if test="roomNumber != null">room_number,</if>
             <if test="roomImage != null and roomImage != ''">room_image,</if>
             <if test="roomType != null and roomType != ''">room_type,</if>
@@ -48,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="empId != null">#{empId},</if>
             <if test="roomNumber != null">#{roomNumber},</if>
             <if test="roomImage != null and roomImage != ''">#{roomImage},</if>
             <if test="roomType != null and roomType != ''">#{roomType},</if>
@@ -74,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateFosterRooms" parameterType="FosterRooms">
         update tb_foster_rooms
         <trim prefix="SET" suffixOverrides=",">
+            <if test="empId != null">emp_id = #{empId},</if>
             <if test="roomNumber != null">room_number = #{roomNumber},</if>
             <if test="roomImage != null and roomImage != ''">room_image = #{roomImage},</if>
             <if test="roomType != null and roomType != ''">room_type = #{roomType},</if>

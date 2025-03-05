@@ -7,15 +7,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Services" id="ServicesResult">
         <result property="serviceId"    column="service_id"    />
         <result property="serviceTypeId"    column="service_type_id"    />
-        <result property="price"    column="price"    />
+        <result property="empId" column="emp_id" />
         <result property="serviceType"    column="service_type"    />
         <result property="serviceStatus"    column="service_status"    />
-        <result property="isAvailable"    column="is_available"    />
         <result property="policyId"    column="policy_id"    />
         <result property="description"    column="description"    />
-        <result property="roomNumber"    column="room_number"    />
-        <result property="roomType"    column="room_type"    />
-        <result property="maxPetsPerRoom"    column="max_pets_per_room"    />
         <result property="includeWalk"    column="include_walk"    />
         <result property="specialRequirements"    column="special_requirements"    />
         <result property="createdAt"    column="created_at"    />
@@ -24,8 +20,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updatedBy"    column="updated_by"    />
     </resultMap>
 
+    <resultMap type="ServicesVo" id="ServicesVoResult">
+        <result property="serviceId"    column="service_id"    />
+        <result property="serviceTypeId"    column="service_type_id"    />
+        <result property="empId" column="emp_id" />
+        <result property="serviceType"    column="service_type"    />
+        <result property="serviceStatus"    column="service_status"    />
+        <result property="policyId"    column="policy_id"    />
+        <result property="description"    column="description"    />
+        <result property="includeWalk"    column="include_walk"    />
+        <result property="specialRequirements"    column="special_requirements"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <association property="serviceTypes" javaType="ServiceTypes" column="service_type_id"
+                     select="com.pet.manager.mapper.ServiceTypesMapper.selectServiceTypesByServiceTypeId" />
+        <association property="fosterRooms" javaType="FosterRooms" column="room_number"
+                     select="com.pet.manager.mapper.FosterRoomsMapper.selectFosterRoomsByRoomNumber" />
+    </resultMap>
+
     <sql id="selectServicesVo">
-        select service_id, service_type_id, price, service_type, service_status, is_available, policy_id, description, room_number, room_type, max_pets_per_room, include_walk, special_requirements, created_at, created_by, updated_at, updated_by from tb_services
+        select service_id, service_type_id, emp_id, service_type, service_status, policy_id, description,  include_walk, special_requirements, created_at, created_by, updated_at, updated_by from tb_services
     </sql>
 
     <select id="selectServicesList" parameterType="Services" resultMap="ServicesResult">
@@ -33,7 +49,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="serviceType != null  and serviceType != ''"> and service_type = #{serviceType}</if>
             <if test="serviceStatus != null  and serviceStatus != ''"> and service_status = #{serviceStatus}</if>
-            <if test="isAvailable != null  and isAvailable != ''"> and is_available = #{isAvailable}</if>
             <if test="policyId != null and policyId != ''">policy_id = #{policyId}</if>
         </where>
     </select>
@@ -42,20 +57,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectServicesVo"/>
         where service_id = #{serviceId}
     </select>
+    <select id="selectServicesVoList" resultMap="ServicesVoResult">
+        <include refid="selectServicesVo"/>
+        <where>
+            <if test="serviceType != null  and serviceType != ''"> and service_type = #{serviceType}</if>
+            <if test="serviceStatus != null  and serviceStatus != ''"> and service_status = #{serviceStatus}</if>
+            <if test="policyId != null and policyId != ''">policy_id = #{policyId}</if>
+            <if test="serviceTypeId != null and serviceTypeId != ''">service_type_id = #{serviceTypeId}</if>
+        </where>
+    </select>
+    <select id="selectServicesByServiceTypeId" resultMap="ServicesResult">
+        <include refid="selectServicesVo"/>
+        where service_type_id = #{serviceTypeId}
+    </select>
 
     <insert id="insertServices" parameterType="Services" useGeneratedKeys="true" keyProperty="serviceId">
         insert into tb_services
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serviceTypeId != null">service_type_id,</if>
-            <if test="price != null">price,</if>
+            <if test="empId != null">emp_id,</if>
             <if test="serviceType != null and serviceType != ''">service_type,</if>
             <if test="serviceStatus != null and serviceStatus != ''">service_status,</if>
-            <if test="isAvailable != null and isAvailable != ''">is_available,</if>
             <if test="policyId != null">policy_id,</if>
             <if test="description != null and description != ''">description,</if>
-            <if test="roomNumber != null">room_number,</if>
-            <if test="roomType != null">room_type,</if>
-            <if test="maxPetsPerRoom != null">max_pets_per_room,</if>
             <if test="includeWalk != null">include_walk,</if>
             <if test="specialRequirements != null">special_requirements,</if>
             <if test="createdAt != null">created_at,</if>
@@ -65,15 +89,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serviceTypeId != null">#{serviceTypeId},</if>
-            <if test="price != null">#{price},</if>
+            <if test="empId != null">#{empId},</if>
             <if test="serviceType != null and serviceType != ''">#{serviceType},</if>
             <if test="serviceStatus != null and serviceStatus != ''">#{serviceStatus},</if>
-            <if test="isAvailable != null and isAvailable != ''">#{isAvailable},</if>
             <if test="policyId != null">#{policyId},</if>
             <if test="description != null and description != ''">#{description},</if>
-            <if test="roomNumber != null">#{roomNumber},</if>
-            <if test="roomType != null">#{roomType},</if>
-            <if test="maxPetsPerRoom != null">#{maxPetsPerRoom},</if>
             <if test="includeWalk != null">#{includeWalk},</if>
             <if test="specialRequirements != null">#{specialRequirements},</if>
             <if test="createdAt != null">#{createdAt},</if>
@@ -87,15 +107,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update tb_services
         <trim prefix="SET" suffixOverrides=",">
             <if test="serviceTypeId != null">service_type_id = #{serviceTypeId},</if>
-            <if test="price != null">price = #{price},</if>
+            <if test="empId != null">emp_id = #{empId},</if>
             <if test="serviceType != null and serviceType != ''">service_type = #{serviceType},</if>
             <if test="serviceStatus != null and serviceStatus != ''">service_status = #{serviceStatus},</if>
-            <if test="isAvailable != null and isAvailable != ''">is_available = #{isAvailable},</if>
             <if test="policyId != null">policy_id = #{policyId},</if>
             <if test="description != null and description != ''">description = #{description},</if>
-            <if test="roomNumber != null">room_number = #{roomNumber},</if>
-            <if test="roomType != null">room_type = #{roomType},</if>
-            <if test="maxPetsPerRoom != null">max_pets_per_room = #{maxPetsPerRoom},</if>
             <if test="includeWalk != null">include_walk = #{includeWalk},</if>
             <if test="specialRequirements != null">special_requirements = #{specialRequirements},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>

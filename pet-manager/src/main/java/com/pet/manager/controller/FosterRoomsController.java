@@ -3,6 +3,7 @@ package com.pet.manager.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pet.manager.domain.vo.FosterRoomsVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -126,4 +127,8 @@ public class FosterRoomsController extends BaseController
     {
         return toAjax(fosterRoomsService.deleteFosterRoomsByFosterRoomIds(fosterRoomIds));
     }
+
+    /**
+     * 根据房间号来查询房间信息
+     */
 }

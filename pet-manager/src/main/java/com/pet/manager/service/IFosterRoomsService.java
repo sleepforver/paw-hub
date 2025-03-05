@@ -2,6 +2,7 @@ package com.pet.manager.service;
 
 import java.util.List;
 import com.pet.manager.domain.FosterRooms;
+import com.pet.manager.domain.vo.FosterRoomsVo;
 
 /**
  * 寄养房间信息Service接口
@@ -64,4 +65,6 @@ public interface IFosterRoomsService
      * @param fosterRoomsList
      */
     int insertSkuBatch(List<FosterRooms> fosterRoomsList);
+
+
 }

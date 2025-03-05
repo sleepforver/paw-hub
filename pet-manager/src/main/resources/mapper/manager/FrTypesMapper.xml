@@ -31,6 +31,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFrTypesVo"/>
         where room_number = #{roomNumber}
     </select>
+    <select id="selectFrTypesByRoomType" parameterType="String" resultMap="FrTypesResult">
+        <include refid="selectFrTypesVo"/>
+        where room_type = #{roomType}
+    </select>
 
     <insert id="insertFrTypes" parameterType="FrTypes" useGeneratedKeys="true" keyProperty="roomTypeId">
         insert into tb_foster_room_types

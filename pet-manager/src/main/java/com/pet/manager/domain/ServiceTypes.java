@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+        import java.math.BigDecimal;
+
 /**
  * 服务类型对象 tb_service_types
  *
@@ -39,7 +41,10 @@ public class ServiceTypes extends BaseEntity
                             @Excel(name = "服务图片")
         private String serviceImage;
 
-    
+            /** 服务价格，不可为空,单位为分 */
+                    @Excel(name = "服务价格，不可为空,单位为分")
+            private BigDecimal price;
+
 
 
 }

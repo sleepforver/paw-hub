@@ -3,31 +3,36 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pet.manager.mapper.ServiceTypesMapper">
-    
+
     <resultMap type="ServiceTypes" id="ServiceTypesResult">
         <result property="serviceTypeId"    column="service_type_id"    />
         <result property="serviceTypeCode"    column="service_type_code"    />
         <result property="serviceName"    column="service_name"    />
         <result property="serviceType"    column="service_type"    />
         <result property="serviceImage"    column="service_image"    />
+        <result property="price"    column="price"    />
     </resultMap>
 
     <sql id="selectServiceTypesVo">
-        select service_type_id, service_type_code, service_name, service_type, service_image from tb_service_types
+        select service_type_id, service_type_code, service_name, service_type, service_image, price from tb_service_types
     </sql>
 
     <select id="selectServiceTypesList" parameterType="ServiceTypes" resultMap="ServiceTypesResult">
         <include refid="selectServiceTypesVo"/>
-        <where>  
+        <where>
             <if test="serviceTypeCode != null  and serviceTypeCode != ''"> and service_type_code = #{serviceTypeCode}</if>
             <if test="serviceName != null  and serviceName != ''"> and service_name like concat('%', #{serviceName}, '%')</if>
             <if test="serviceType != null  and serviceType != ''"> and service_type = #{serviceType}</if>
         </where>
     </select>
-    
+
     <select id="selectServiceTypesByServiceTypeId" parameterType="Long" resultMap="ServiceTypesResult">
         <include refid="selectServiceTypesVo"/>
         where service_type_id = #{serviceTypeId}
+    </select>
+    <select id="selectServiceTypesByServiceName" resultType="com.pet.manager.domain.ServiceTypes">
+        <include refid="selectServiceTypesVo"/>
+        where service_name = #{serviceName}
     </select>
 
     <insert id="insertServiceTypes" parameterType="ServiceTypes" useGeneratedKeys="true" keyProperty="serviceTypeId">
@@ -37,12 +42,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="serviceName != null and serviceName != ''">service_name,</if>
             <if test="serviceType != null and serviceType != ''">service_type,</if>
             <if test="serviceImage != null">service_image,</if>
+            <if test="price != null">price = #{price},</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serviceTypeCode != null and serviceTypeCode != ''">#{serviceTypeCode},</if>
             <if test="serviceName != null and serviceName != ''">#{serviceName},</if>
             <if test="serviceType != null and serviceType != ''">#{serviceType},</if>
             <if test="serviceImage != null">#{serviceImage},</if>
+            <if test="price != null">price = #{price},</if>
          </trim>
     </insert>
 
@@ -53,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="serviceName != null and serviceName != ''">service_name = #{serviceName},</if>
             <if test="serviceType != null and serviceType != ''">service_type = #{serviceType},</if>
             <if test="serviceImage != null">service_image = #{serviceImage},</if>
+            <if test="price != null">price = #{price},</if>
         </trim>
         where service_type_id = #{serviceTypeId}
     </update>
@@ -62,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteServiceTypesByServiceTypeIds" parameterType="String">
-        delete from tb_service_types where service_type_id in 
+        delete from tb_service_types where service_type_id in
         <foreach item="serviceTypeId" collection="array" open="(" separator="," close=")">
             #{serviceTypeId}
         </foreach>

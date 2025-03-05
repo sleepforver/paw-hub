@@ -66,33 +66,6 @@ CREATE TABLE tb_pets (
                          updated_by Int COMMENT '记录更新人ID'
 )comment '宠物表';
 
--- 宠物健康记录表 (PetHealthRecords)
-/*
-表名：tb_pet_health_records
-注释：
-- record_id：健康记录ID，主键，自增
-- pet_id：宠物ID，外键，关联 tb_pets 表
-- record_date：健康记录日期，不可为空
-- description：健康记录描述（可空）
-- veterinarian_name：兽医姓名（可空）
-- created_at：记录创建时间，默认为当前时间
-- created_by：记录创建人ID
-- updated_at：记录更新时间，默认为当前时间，更新时自动更新
-- updated_by：记录更新人ID
-外键关系：
-- pet_id 关联 tb_pets 表中的宠物
-*/
-CREATE TABLE tb_pet_health_records (
-                                       record_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '健康记录ID，主键，自增',
-                                       pet_id INT COMMENT '宠物ID，外键，关联 tb_pets 表',
-                                       record_date DATE NOT NULL COMMENT '健康记录日期，不可为空',
-                                       description TEXT COMMENT '健康记录描述',
-                                       veterinarian_name VARCHAR(100) COMMENT '兽医姓名',
-                                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间，默认为当前时间',
-                                       created_by Int COMMENT '记录创建人ID',
-                                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录更新时间，默认为当前时间，更新时自动更新',
-                                       updated_by Int COMMENT '记录更新人ID'
-)comment '宠物健康记录表';
 
 -- 服务表 (Services)
 /*
@@ -113,12 +86,7 @@ CREATE TABLE tb_services (
                              service_name VARCHAR(100) NOT NULL COMMENT '服务名称，不可为空',
                              description TEXT COMMENT '服务描述',
                              price DECIMAL(10, 2) NOT NULL COMMENT '服务价格，不可为空',
-                             is_available BOOLEAN DEFAULT TRUE COMMENT '服务是否可用，默认为TRUE',
-                             service_type varchar(20) DEFAULT 'General' COMMENT '服务类型（常规/寄养）',
-                             room_number INT NOT NULL COMMENT '房间号',
-                             room_type varchar(25) NOT NULL COMMENT '房型',
-                             daily_price DECIMAL(10,2) NOT NULL COMMENT '每日价格',
-                             max_pets_per_room INT  COMMENT '单间最大宠物数量',
+                             service_type varchar(20),
                              include_walk int COMMENT '包含遛狗服务',
                              special_requirements TEXT COMMENT '特殊要求说明',
                              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间，默认为当前时间',
@@ -350,5 +318,43 @@ create table tb_policy
         unique (policy_name)
 )
     comment '策略表';
+
+create table tb_emp
+(
+    id          int auto_increment comment '主键'
+        primary key,
+    user_name   varchar(50)                         not null comment '员工名称',
+    role_id     int                                 null comment '角色id',
+    role_code   varchar(10)                         null comment '角色编号',
+    role_name   varchar(50)                         null comment '角色名称',
+    mobile      varchar(15)                         null comment '联系电话',
+    image       varchar(500)                        null comment '员工头像',
+    status      tinyint   default 1                 null comment '是否启用',
+    create_time timestamp default CURRENT_TIMESTAMP null comment '创建时间',
+    update_time timestamp default CURRENT_TIMESTAMP null comment '修改时间',
+    constraint tb_user_Id_uindex
+        unique (id),
+    constraint tb_user_mobile_uindex
+        unique (mobile),
+    constraint tb_user_user_name_uindex
+        unique (user_name)
+)
+    comment '工单员工表';
+
+create table tb_role
+(
+    role_id   int auto_increment
+        primary key,
+    role_code varchar(50) null comment '角色编码
+',
+    role_name varchar(50) null comment '角色名称
+',
+    constraint tb_role_role_code_uindex
+        unique (role_code),
+    constraint tb_role_role_name_uindex
+        unique (role_name)
+)
+    comment '工单角色表';
+
 
 

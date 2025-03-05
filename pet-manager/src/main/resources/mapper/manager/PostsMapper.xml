@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.manager.mapper.PostsMapper">
+
+    <resultMap type="Posts" id="PostsResult">
+        <result property="postId"    column="post_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="content"    column="content"    />
+        <result property="postImage"    column="post_image"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="updatedBy"    column="updated_by"    />
+    </resultMap>
+
+    <sql id="selectPostsVo">
+        select post_id, user_id, content, post_image, created_at, created_by, updated_at, updated_by from tb_posts
+    </sql>
+
+    <select id="selectPostsList" parameterType="Posts" resultMap="PostsResult">
+        <include refid="selectPostsVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"  >
+                AND date_format(created_at,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''">
+                AND date_format(created_at,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPostsByPostId" parameterType="Long" resultMap="PostsResult">
+        <include refid="selectPostsVo"/>
+        where post_id = #{postId}
+    </select>
+
+    <insert id="insertPosts" parameterType="Posts" useGeneratedKeys="true" keyProperty="postId">
+        insert into tb_posts
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="postImage != null and postImage != ''">post_image,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="updatedBy != null">updated_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="postImage != null and postImage != ''">#{postImage},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="updatedBy != null">#{updatedBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePosts" parameterType="Posts">
+        update tb_posts
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="postImage != null and postImage != ''">post_image = #{postImage},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="updatedBy != null">updated_by = #{updatedBy},</if>
+        </trim>
+        where post_id = #{postId}
+    </update>
+
+    <delete id="deletePostsByPostId" parameterType="Long">
+        delete from tb_posts where post_id = #{postId}
+    </delete>
+
+    <delete id="deletePostsByPostIds" parameterType="String">
+        delete from tb_posts where post_id in
+        <foreach item="postId" collection="array" open="(" separator="," close=")">
+            #{postId}
+        </foreach>
+    </delete>
+</mapper>

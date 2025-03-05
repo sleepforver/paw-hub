@@ -3,6 +3,7 @@ package com.pet.manager.service.impl;
 import java.util.List;
 import com.pet.common.utils.DateUtils;
 import com.pet.manager.domain.FrTypes;
+import com.pet.manager.domain.vo.FosterRoomsVo;
 import com.pet.manager.mapper.FrTypesMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -109,4 +110,6 @@ public class FosterRoomsServiceImpl implements IFosterRoomsService
     public int insertSkuBatch(List<FosterRooms> fosterRoomsList) {
         return fosterRoomsMapper.insertFrBatch(fosterRoomsList);
     }
+
+
 }

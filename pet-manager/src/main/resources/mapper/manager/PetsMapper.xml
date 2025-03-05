@@ -32,6 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="breed != null  and breed != ''"> and breed = #{breed}</if>
             <if test="vaccinationRecord != null  and vaccinationRecord != ''"> and vaccination_record = #{vaccinationRecord}</if>
             <if test="userId != null and userId != ''"> and user_id = #{userId}</if>
+            <if test="petId != null and petId != ''">pet_id = #{petId}</if>
         </where>
     </select>
 

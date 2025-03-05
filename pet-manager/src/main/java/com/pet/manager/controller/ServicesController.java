@@ -3,6 +3,7 @@ package com.pet.manager.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pet.manager.domain.vo.ServicesVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,7 +49,7 @@ public class ServicesController extends BaseController
     public TableDataInfo list(Services services)
     {
         startPage();
-        List<Services> list = servicesService.selectServicesList(services);
+        List<ServicesVo> list = servicesService.selectServicesVoList(services);
         return getDataTable(list);
     }
 
