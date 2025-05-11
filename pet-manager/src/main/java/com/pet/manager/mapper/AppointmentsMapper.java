@@ -3,6 +3,7 @@ package com.pet.manager.mapper;
 import java.util.List;
 import com.pet.manager.domain.Appointments;
 import com.pet.manager.domain.vo.AppointmentsVo;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 预约管理Mapper接口
@@ -67,4 +68,11 @@ public interface AppointmentsMapper
      * @return 预约管理集合
      */
     List<AppointmentsVo> selectAppointmentsVoList(Appointments appointments);
+
+    /**
+     * 统计预约状态
+     * @param
+     */
+    @Select("select count(appointment_id) from tb_appointments where status = #{status};")
+    Integer countStatus(Long status);
 }

@@ -9,6 +9,7 @@ import com.pet.common.constant.PawHubConstants;
 import com.pet.common.exception.ServiceException;
 import com.pet.common.utils.DateUtils;
 import com.pet.manager.domain.*;
+import com.pet.manager.domain.vo.AppointmentsStatisticsVO;
 import com.pet.manager.domain.vo.AppointmentsVo;
 import com.pet.manager.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -192,6 +193,18 @@ public class AppointmentsServiceImpl implements IAppointmentsService
         appointments.setStatus(PawHubConstants.Appointment_STATUS_CANCELLED);
         appointments.setUpdatedAt(DateUtils.getNowDate());
         return appointmentsMapper.updateAppointments(appointments);
+    }
+
+    @Override
+    public AppointmentsStatisticsVO statistics() {
+        //根据状态，拿到待处理预约和已完成预约的数量
+        AppointmentsStatisticsVO appointmentsStatisticsVO = new AppointmentsStatisticsVO();
+        Integer  pendingCount = appointmentsMapper.countStatus(PawHubConstants.Appointment_STATUS_WAIT_CONFIRM);
+        Integer confirmedCount = appointmentsMapper.countStatus(PawHubConstants.Appointment_STATUS_COMPLETED);
+
+        appointmentsStatisticsVO.setPendingCount(pendingCount);
+        appointmentsStatisticsVO.setConfirmedCount(confirmedCount);
+        return appointmentsStatisticsVO;
     }
 
     //检查是否是否有同类型的预约

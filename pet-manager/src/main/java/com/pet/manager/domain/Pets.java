@@ -49,8 +49,8 @@ public class Pets extends BaseEntity
                             @Excel(name = "宠物图片URL")
         private String petImageUrl;
 
-                /** 疫苗接种记录图片URL */
-                            @Excel(name = "疫苗接种记录图片URL")
+                /** 疫苗接种记录 */
+                            @Excel(name = "疫苗接种记录")
         private String vaccinationRecord;
 
                 /** 所属用户ID，外键，关联 tb_users 表 */

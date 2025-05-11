@@ -2,6 +2,7 @@ package com.pet.manager.service;
 
 import java.util.List;
 import com.pet.manager.domain.Appointments;
+import com.pet.manager.domain.vo.AppointmentsStatisticsVO;
 import com.pet.manager.domain.vo.AppointmentsVo;
 
 /**
@@ -74,4 +75,10 @@ public interface IAppointmentsService
      * @return
      */
     int cancelAppointments(Appointments appointments);
+
+    /**
+     * 统计预约数量
+     * @return
+     */
+    AppointmentsStatisticsVO statistics();
 }

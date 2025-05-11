@@ -49,7 +49,7 @@ public class SysNoticeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:notice:query')")
     @GetMapping(value = "/{noticeId}")
-    public AjaxResult getInfo(@PathVariable Long noticeId)
+    public AjaxResult getInfo(@PathVariable("noticeId") Long noticeId)
     {
         return success(noticeService.selectNoticeById(noticeId));
     }

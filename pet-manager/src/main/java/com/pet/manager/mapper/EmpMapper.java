@@ -2,18 +2,19 @@ package com.pet.manager.mapper;
 
 import java.util.List;
 import com.pet.manager.domain.Emp;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 员工列表Mapper接口
- * 
+ *
  * @author kkk
  * @date 2025-02-27
  */
-public interface EmpMapper 
+public interface EmpMapper
 {
     /**
      * 查询员工列表
-     * 
+     *
      * @param id 员工列表主键
      * @return 员工列表
      */
@@ -21,7 +22,7 @@ public interface EmpMapper
 
     /**
      * 查询员工列表列表
-     * 
+     *
      * @param emp 员工列表
      * @return 员工列表集合
      */
@@ -29,7 +30,7 @@ public interface EmpMapper
 
     /**
      * 新增员工列表
-     * 
+     *
      * @param emp 员工列表
      * @return 结果
      */
@@ -37,7 +38,7 @@ public interface EmpMapper
 
     /**
      * 修改员工列表
-     * 
+     *
      * @param emp 员工列表
      * @return 结果
      */
@@ -45,7 +46,7 @@ public interface EmpMapper
 
     /**
      * 删除员工列表
-     * 
+     *
      * @param id 员工列表主键
      * @return 结果
      */
@@ -53,9 +54,17 @@ public interface EmpMapper
 
     /**
      * 批量删除员工列表
-     * 
+     *
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
     public int deleteEmpByIds(Long[] ids);
+
+    /**
+     * 统计员工数量
+     *
+     * @return 员工数量
+     */
+    @Select("select count(id) from tb_emp")
+    Integer countEmp();
 }

@@ -2,7 +2,7 @@ package ${packageName}.controller;
 
 ## 导入所需的Java类库
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

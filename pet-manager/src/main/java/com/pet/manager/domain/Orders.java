@@ -1,7 +1,9 @@
 package com.pet.manager.domain;
 
         import java.math.BigDecimal;
-    import java.util.Date;
+        import java.time.LocalDate;
+        import java.time.LocalDateTime;
+        import java.util.Date;
     import com.fasterxml.jackson.annotation.JsonFormat;
     import com.pet.common.annotation.Excel;
             import com.pet.common.core.domain.BaseEntity;
@@ -83,13 +85,13 @@ public class Orders extends BaseEntity
                 /** 记录创建时间，默认为当前时间 */
                             @JsonFormat(pattern = "yyyy-MM-dd")
                 @Excel(name = "记录创建时间，默认为当前时间", width = 30, dateFormat = "yyyy-MM-dd")
-        private Date createdAt;
+        private LocalDateTime createdAt;
 
                 /** 记录创建人ID */
                     private Long createdBy;
 
                 /** 记录更新时间，默认为当前时间，更新时自动更新 */
-                    private Date updatedAt;
+                    private LocalDateTime updatedAt;
 
                 /** 记录更新人ID */
                     private Long updatedBy;

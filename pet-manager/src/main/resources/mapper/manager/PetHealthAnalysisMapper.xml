@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pet.manager.mapper.PetHealthAnalysisMapper">
+    
+    <resultMap type="PetHealthAnalysis" id="PetHealthAnalysisResult">
+        <result property="analysisId"    column="analysis_id"    />
+        <result property="recordId"    column="record_id"    />
+        <result property="diseaseName"    column="disease_name"    />
+        <result property="confidenceScore"    column="confidence_score"    />
+        <result property="detectedFeatures"    column="detected_features"    />
+        <result property="analysisDetails"    column="analysis_details"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectPetHealthAnalysisVo">
+        select analysis_id, record_id, disease_name, confidence_score, detected_features, analysis_details, created_at, updated_at from tb_pet_health_ai_analysis
+    </sql>
+
+    <select id="selectPetHealthAnalysisList" parameterType="PetHealthAnalysis" resultMap="PetHealthAnalysisResult">
+        <include refid="selectPetHealthAnalysisVo"/>
+        <where>  
+            <if test="recordId != null "> and record_id = #{recordId}</if>
+            <if test="diseaseName != null  and diseaseName != ''"> and disease_name like concat('%', #{diseaseName}, '%')</if>
+            <if test="confidenceScore != null "> and confidence_score = #{confidenceScore}</if>
+            <if test="detectedFeatures != null  and detectedFeatures != ''"> and detected_features = #{detectedFeatures}</if>
+            <if test="analysisDetails != null  and analysisDetails != ''"> and analysis_details = #{analysisDetails}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectPetHealthAnalysisByAnalysisId" parameterType="Long" resultMap="PetHealthAnalysisResult">
+        <include refid="selectPetHealthAnalysisVo"/>
+        where analysis_id = #{analysisId}
+    </select>
+
+    <insert id="insertPetHealthAnalysis" parameterType="PetHealthAnalysis" useGeneratedKeys="true" keyProperty="analysisId">
+        insert into tb_pet_health_ai_analysis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">record_id,</if>
+            <if test="diseaseName != null">disease_name,</if>
+            <if test="confidenceScore != null">confidence_score,</if>
+            <if test="detectedFeatures != null">detected_features,</if>
+            <if test="analysisDetails != null">analysis_details,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">#{recordId},</if>
+            <if test="diseaseName != null">#{diseaseName},</if>
+            <if test="confidenceScore != null">#{confidenceScore},</if>
+            <if test="detectedFeatures != null">#{detectedFeatures},</if>
+            <if test="analysisDetails != null">#{analysisDetails},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePetHealthAnalysis" parameterType="PetHealthAnalysis">
+        update tb_pet_health_ai_analysis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recordId != null">record_id = #{recordId},</if>
+            <if test="diseaseName != null">disease_name = #{diseaseName},</if>
+            <if test="confidenceScore != null">confidence_score = #{confidenceScore},</if>
+            <if test="detectedFeatures != null">detected_features = #{detectedFeatures},</if>
+            <if test="analysisDetails != null">analysis_details = #{analysisDetails},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where analysis_id = #{analysisId}
+    </update>
+
+    <delete id="deletePetHealthAnalysisByAnalysisId" parameterType="Long">
+        delete from tb_pet_health_ai_analysis where analysis_id = #{analysisId}
+    </delete>
+
+    <delete id="deletePetHealthAnalysisByAnalysisIds" parameterType="String">
+        delete from tb_pet_health_ai_analysis where analysis_id in 
+        <foreach item="analysisId" collection="array" open="(" separator="," close=")">
+            #{analysisId}
+        </foreach>
+    </delete>
+</mapper>

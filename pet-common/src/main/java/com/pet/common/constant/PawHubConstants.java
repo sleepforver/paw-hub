@@ -86,4 +86,23 @@ public class PawHubConstants {
      * 订单状态 服务取消
      */
     public static final Long ORDER_STATUS_SERVICE_CANCELLED = 3l;
+
+    /**
+     * 健康状态 健康
+     */
+    public static final Long HEALTH_STATUS_HEALTHY = 0l;
+
+    /**
+     * 健康状态 患病
+     */
+    public static final Long HEALTH_STATUS_ILL = 1l;
+
+    /**
+     * 宠物类型 狗
+     */
+    public static final Long PET_TYPE_DOG = 1l;
+    /**
+     * 宠物类型 猫
+     */
+    public static final Long PET_TYPE_CAT = 0l;
 }

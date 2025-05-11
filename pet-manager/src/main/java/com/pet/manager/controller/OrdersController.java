@@ -1,12 +1,20 @@
 package com.pet.manager.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+
+import com.pet.manager.domain.vo.OrderStatisticsVO;
+import com.pet.manager.domain.vo.ServicesTop10Vo;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.pet.common.constant.PawHubConstants;
 import com.pet.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -139,5 +147,29 @@ public class OrdersController extends BaseController
     public AjaxResult cancel(@RequestBody Orders orders)
     {
         return toAjax(ordersService.cancel(orders));
+    }
+
+    /**
+     * 获取指定时间的订单数量
+     */
+    @ApiOperation("获取指定时间的订单数量")
+    @PreAuthorize("@ss.hasPermi('manager:order:query')")
+    @GetMapping("/ordersStatistics")
+    public R<OrderStatisticsVO> getOrderStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end) {
+        return R.ok(ordersService.getOrderStatistics(begin, end));
+    }
+
+
+    @ApiOperation("获取今日销量top4的服务")
+    @PreAuthorize("@ss.hasPermi('manager:order:query')")
+    @GetMapping("/ordersStatistics/top4")
+    public R<ServicesTop10Vo> top4() {
+        LocalDate begin = LocalDate.now();
+        LocalDate end = LocalDate.now();
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+        return R.ok(ordersService.getTop4(beginTime, endTime));
     }
 }

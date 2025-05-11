@@ -1,7 +1,9 @@
 package com.pet.manager.controller;
 
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+
+import com.pet.manager.domain.vo.PetStatisticsVO;
+import jakarta.servlet.http.HttpServletResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -111,5 +113,16 @@ public class PetsController extends BaseController
     public AjaxResult remove(@PathVariable Long[] petIds)
     {
         return toAjax(petsService.deletePetsByPetIds(petIds));
+    }
+
+    /**
+     * 统计宠物数量
+     */
+    @ApiOperation("统计宠物数量")
+    @PreAuthorize("@ss.hasPermi('manager:pets:query')")
+    @GetMapping("/statistics")
+    public R<PetStatisticsVO> statistics(){
+        PetStatisticsVO petStatisticsVO = petsService.statistics();
+        return R.ok(petStatisticsVO);
     }
 }

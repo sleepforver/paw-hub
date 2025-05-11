@@ -1,5 +1,6 @@
 package com.pet.manager.domain;
 
+        import java.time.LocalDateTime;
         import java.util.Date;
     import com.fasterxml.jackson.annotation.JsonFormat;
     import com.pet.common.annotation.Excel;
@@ -77,7 +78,9 @@ public class Appointments extends BaseEntity
                 /** 记录更新人ID */
                     private Long updatedBy;
 
-
+            //今日时间
+            private LocalDateTime begin;
+            private LocalDateTime end;
 
 
 }

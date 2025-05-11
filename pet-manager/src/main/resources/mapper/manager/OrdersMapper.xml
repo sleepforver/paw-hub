@@ -45,6 +45,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectOrdersVo"/>
         where order_id = #{orderId}
     </select>
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(order_id)
+        from tb_orders
+        <where>
+            <if test="begin != null">
+                and created_at &gt; #{begin}
+            </if>
+            <if test="end != null">
+                and created_at &lt; #{end}
+            </if>
+            <if test="status != null">
+                and order_status = #{status}
+            </if>
+        </where>;
+    </select>
+    <select id="getServicesTop4" resultType="com.pet.manager.domain.dto.ServicesTop4Dto">
+         select service_name, sum(amount) as number
+         from tb_orders
+         <where>
+            <if test="begin != null">
+                and created_at &gt; #{begin}
+            </if>
+            <if test="end != null">
+                and created_at &lt; #{end}
+            </if>
+        </where>
+         group by service_name
+         order by number desc
+         limit 0,4;
+    </select>
 
     <insert id="insertOrders" parameterType="Orders" useGeneratedKeys="true" keyProperty="orderId">
         insert into tb_orders

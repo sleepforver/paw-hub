@@ -1,7 +1,14 @@
 package com.pet.manager.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+
+import com.pet.manager.domain.Orders;
+import com.pet.manager.domain.dto.AppointmentsDto;
+import com.pet.manager.domain.vo.AppointmentsStatisticsVO;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.pet.manager.domain.vo.AppointmentsVo;
 import io.swagger.annotations.Api;
@@ -121,5 +128,29 @@ public class AppointmentsController extends BaseController
     public AjaxResult cancel(@RequestBody Appointments appointments)
     {
         return toAjax(appointmentsService.cancelAppointments(appointments));
+    }
+
+    @ApiOperation("统计预约数量")
+    @PreAuthorize("@ss.hasPermi('manager:appointments:query')")
+    @GetMapping("/statistics")
+    public R<AppointmentsStatisticsVO> statistics()
+    {
+        AppointmentsStatisticsVO appointmentsStatisticsVO = appointmentsService.statistics();
+        return R.ok(appointmentsStatisticsVO);
+    }
+
+    @ApiOperation("获取今日的预约信息")
+    @PreAuthorize("@ss.hasPermi('manager:appointments:query')")
+    @GetMapping("/appointmentStatistics/today")
+    public TableDataInfo getTodayOrderStatistics() {
+        LocalDate begin = LocalDate.now();
+        LocalDate end = LocalDate.now();
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+        AppointmentsDto appointmentsDto = new AppointmentsDto();
+        appointmentsDto.setBegin(beginTime);
+        appointmentsDto.setEnd(endTime);
+        List<AppointmentsVo> appointmentsList = appointmentsService.selectAppointmentsVoList(appointmentsDto);
+        return getDataTable(appointmentsList);
     }
 }

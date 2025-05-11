@@ -1,7 +1,11 @@
 package com.pet.manager.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import com.pet.manager.domain.Orders;
+import com.pet.manager.domain.vo.OrderStatisticsVO;
+import com.pet.manager.domain.vo.ServicesTop10Vo;
 
 /**
  * 订单管理Service接口
@@ -72,4 +76,16 @@ public interface IOrdersService
      * @return
      */
     int cancel(Orders orders);
+
+    /**
+     * 获取指定时间内的订单数量
+     * @return
+     */
+    OrderStatisticsVO getOrderStatistics(LocalDate begin, LocalDate end);
+
+    /**
+     * 获取今日销量前4的服务
+     * @return
+     */
+    ServicesTop10Vo getTop4(LocalDateTime begin, LocalDateTime end);
 }

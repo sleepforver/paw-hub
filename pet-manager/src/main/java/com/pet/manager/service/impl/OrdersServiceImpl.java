@@ -2,27 +2,33 @@ package com.pet.manager.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import com.pet.common.constant.PawHubConstants;
 import com.pet.common.exception.ServiceException;
 import com.pet.common.utils.DateUtils;
 import com.pet.common.utils.SnowflakeIdGenerator;
-import com.pet.common.utils.uuid.UUID;
+import com.pet.common.utils.StringUtils;
 import com.pet.manager.domain.Policy;
 import com.pet.manager.domain.ServiceTypes;
 import com.pet.manager.domain.Services;
+import com.pet.manager.domain.dto.ServicesTop4Dto;
+import com.pet.manager.domain.vo.OrderStatisticsVO;
+import com.pet.manager.domain.vo.ServicesTop10Vo;
 import com.pet.manager.mapper.PolicyMapper;
 import com.pet.manager.mapper.ServiceTypesMapper;
 import com.pet.manager.mapper.ServicesMapper;
+import org.apache.poi.hpsf.Decimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pet.manager.mapper.OrdersMapper;
 import com.pet.manager.domain.Orders;
 import com.pet.manager.service.IOrdersService;
-import org.springframework.util.DigestUtils;
 
 import static com.fasterxml.jackson.core.io.NumberInput.parseBigDecimal;
 
@@ -201,6 +207,98 @@ public class OrdersServiceImpl implements IOrdersService
         return ordersMapper.updateOrders(orders);
     }
 
+    /**
+     * 获取指定时间的订单数量
+     * @return
+     */
+    @Override
+    public OrderStatisticsVO getOrderStatistics(LocalDate begin, LocalDate end) {
+        //当前的集合用于存放从begin到end范围内每天的日期
+        List<LocalDate> dateList = new ArrayList<>();
+
+        dateList.add(begin);
+
+        while(!begin.equals(end)){
+            //日期计算，计算指定日期的后一天对应的日期
+            begin = begin.plusDays(1);
+            dateList.add(begin);
+        }
+
+        //存放每天的订单总数
+        List<Integer> orderCountList = new ArrayList<>();
+        //存放每天的有效订单数
+        List<Integer> validOrderCountList = new ArrayList<>();
+        //遍历dateList集合，查询每天的有效订单数和订单总数
+        for (LocalDate date : dateList) {
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date, LocalTime.MAX);
+            //查询每天订单总数  select count(id) from orders where order_time >? and order_time < ？
+            Integer orderCount = getOrderCount(beginTime, endTime, null);
+
+            //查询每天有效订单数 select count(id) from orders where order_time > ? and order_time < ? and status =
+            Integer validOrderCount = getOrderCount(beginTime, endTime, PawHubConstants.ORDER_STATUS_SERVICE_COMPLETED);
+
+            orderCountList.add(orderCount);
+            validOrderCountList.add(validOrderCount);
+        }
+
+        //计算时间区间内的订单总数量
+        Integer totalOrderCount = orderCountList.stream().reduce(Integer::sum).get();
+
+        //计算时间区间内的有效订单总数量
+        Integer validOrderCount = validOrderCountList.stream().reduce(Integer::sum).get();
+
+        return OrderStatisticsVO.builder()
+                .dateList(StringUtils.join(dateList, ","))
+                .orderCountList(StringUtils.join(orderCountList, ","))
+                .validOrderCount(validOrderCount)
+                .validOrderCountList(StringUtils.join(validOrderCountList, ","))
+                .totalOrderCount(totalOrderCount)
+                .build();
+    }
+
+    /**
+     * 获取今日销量top4的服务
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public ServicesTop10Vo getTop4(LocalDateTime begin, LocalDateTime end) {
+        List<ServicesTop4Dto> servicesTop4DtoList = Optional.ofNullable(ordersMapper.getServicesTop4(begin, end))
+                .orElse(Collections.emptyList());
+
+// 过滤掉null元素并提取name，处理空列表情况
+        List<String> names = servicesTop4DtoList.stream()
+                .filter(Objects::nonNull) // 过滤null的ServicesTop4Dto对象
+                .map(ServicesTop4Dto::getName)
+                .filter(Objects::nonNull) // 过滤null的name
+                .collect(Collectors.toList());
+
+// 过滤掉null元素并提取number，处理空列表情况
+        // 假设number是BigDecimal类型
+        // 过滤null的ServicesTop4Dto对象
+        // 过滤null的number
+        List<Decimal> numbers = new ArrayList<>();
+        for (ServicesTop4Dto servicesTop4Dto : servicesTop4DtoList) {
+            if (servicesTop4Dto != null) {
+                Decimal number = servicesTop4Dto.getNumber();
+                if (number != null) {
+                    numbers.add(number);
+                }
+            }
+        }
+
+// 如果列表为空，返回"0"或特定默认值
+        String nameResult = names.isEmpty() ? "0" : StringUtils.join(names, ",");
+        String numberResult = numbers.isEmpty() ? "0" : StringUtils.join(numbers, ",");
+
+        return ServicesTop10Vo.builder()
+                .nameList(nameResult)
+                .numberList(numberResult)
+                .build();
+    }
+
     private static void checkCreateOrder(Orders orders) {
         //检查订单类型与服务名称是否一致
         //如果订单类型为常规，而服务名称为宠物住宿，则抛出异常
@@ -215,5 +313,13 @@ public class OrdersServiceImpl implements IOrdersService
                 throw new ServiceException("当前订单类型为寄养，应该选择宠物住宿，请修改订单类型或服务名称");
             }
         }
+    }
+    private Integer getOrderCount(LocalDateTime begin,LocalDateTime end,Long status){
+        Map map = new HashMap();
+        map.put("begin",begin);
+        map.put("end",end);
+        map.put("status",status);
+
+        return ordersMapper.countByMap(map);
     }
 }

@@ -356,5 +356,63 @@ create table tb_role
 )
     comment '工单角色表';
 
+-- 宠物健康检查记录表 (PetHealthRecords)
+/*
+表名：tb_pet_health_records
+注释：
+- record_id：记录ID，主键，自增
+- pet_id：宠物ID，关联宠物表
+- check_date：检查日期
+- image_url：上传的图片URL
+- symptoms：症状描述
+- ai_diagnosis：AI诊断结果
+- severity_level：严重程度（Low/Medium/High）
+- recommendations：建议措施
+- status：状态（Pending/Analyzed/Reviewed）
+- created_at：记录创建时间
+- created_by：记录创建人ID
+- updated_at：记录更新时间
+- updated_by：记录更新人ID
+*/
+CREATE TABLE tb_pet_health_records (
+                                       record_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID，主键，自增',
+                                       pet_id INT NOT NULL COMMENT '宠物ID，关联宠物表',
+                                       check_date DATETIME NOT NULL COMMENT '检查日期',
+                                       image_url VARCHAR(255) NOT NULL COMMENT '上传的图片URL',
+                                       symptoms TEXT COMMENT '症状描述',
+                                       ai_diagnosis TEXT COMMENT 'AI诊断结果',
+                                       severity_level ENUM('Low', 'Medium', 'High') COMMENT '严重程度',
+                                       recommendations TEXT COMMENT '建议措施',
+                                       status ENUM('Pending', 'Analyzed', 'Reviewed') DEFAULT 'Pending' COMMENT '状态',
+                                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
+                                       created_by INT COMMENT '记录创建人ID',
+                                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录更新时间',
+                                       updated_by INT COMMENT '记录更新人ID',
+                                       FOREIGN KEY (pet_id) REFERENCES tb_pets(pet_id)
+) COMMENT '宠物健康检查记录表';
 
+-- AI分析详情表 (PetHealthAIAnalysis)
+/*
+表名：tb_pet_health_ai_analysis
+注释：
+- analysis_id：分析ID，主键，自增
+- record_id：关联健康记录ID
+- disease_name：疾病名称
+- confidence_score：AI置信度得分
+- detected_features：检测到的特征
+- analysis_details：详细分析结果（JSON格式）
+- created_at：记录创建时间
+- updated_at：记录更新时间
+*/
+CREATE TABLE tb_pet_health_ai_analysis (
+                                           analysis_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '分析ID，主键，自增',
+                                           record_id INT NOT NULL COMMENT '关联健康记录ID',
+                                           disease_name VARCHAR(100) COMMENT '疾病名称',
+                                           confidence_score DECIMAL(5,2) COMMENT 'AI置信度得分',
+                                           detected_features TEXT COMMENT '检测到的特征',
+                                           analysis_details JSON COMMENT '详细分析结果（JSON格式）',
+                                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '记录创建时间',
+                                           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '记录更新时间',
+                                           FOREIGN KEY (record_id) REFERENCES tb_pet_health_records(record_id)
+) COMMENT 'AI分析详情表';
 

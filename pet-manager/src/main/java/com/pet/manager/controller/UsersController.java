@@ -1,7 +1,7 @@
 package com.pet.manager.controller;
 
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.pet.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
@@ -122,7 +122,7 @@ public class UsersController extends BaseController
     @PreAuthorize("@ss.hasPermi('manager:users:edit')")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPassword/{userId}")
-    public AjaxResult resetPassword(@PathVariable Long userId)
+    public AjaxResult resetPassword(@PathVariable("userId") Long userId)
     {
         Users users = new Users();
         users.setUserId(userId);

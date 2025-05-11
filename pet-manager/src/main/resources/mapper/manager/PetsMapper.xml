@@ -82,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="age != null">age = #{age},</if>
             <if test="gender != null and gender != ''">gender = #{gender},</if>
             <if test="petImageUrl != null and petImageUrl != ''">pet_image_url = #{petImageUrl},</if>
-            <if test="vaccinationRecord != null and vaccinationRecord != ''">vaccination_record = #{vaccinationRecordUrl},</if>
+            <if test="vaccinationRecord != null and vaccinationRecord != ''">vaccination_record = #{vaccinationRecord},</if>
             <if test="userId != null">user_id = #{userId},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
             <if test="createdBy != null">created_by = #{createdBy},</if>

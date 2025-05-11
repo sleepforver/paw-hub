@@ -21,6 +21,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createdBy"    column="created_by"    />
         <result property="updatedAt"    column="updated_at"    />
         <result property="updatedBy"    column="updated_by"    />
+        <result property="begin" column="begin" />
+        <result property="end" column="end" />
     </resultMap>
 
     <resultMap type="AppointmentsVo" id="AppointmentsVoResult">
@@ -40,6 +42,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createdBy"    column="created_by"    />
         <result property="updatedAt"    column="updated_at"    />
         <result property="updatedBy"    column="updated_by"    />
+        <result property="begin" column="begin" />
+        <result property="end" column="end" />
         <association property="pets" javaType="Pets" column="pet_id"
                      select="com.pet.manager.mapper.PetsMapper.selectPetsByPetId" />
         <association property="users" javaType="Users" column="user_id"
@@ -106,6 +110,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="params.endTime != null and params.endTime != ''">
                 AND date_format(created_at,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="begin != null">
+                and created_at &gt; #{begin}
+            </if>
+            <if test="end != null">
+                and created_at &lt; #{end}
             </if>
         </where>
     </select>

@@ -1,6 +1,6 @@
 package com.pet.generator.domain;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import com.pet.common.core.domain.BaseEntity;
 import com.pet.common.utils.StringUtils;
 

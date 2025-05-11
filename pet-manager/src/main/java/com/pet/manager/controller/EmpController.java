@@ -1,7 +1,9 @@
 package com.pet.manager.controller;
 
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
+
+import com.pet.manager.domain.vo.EmpStatisticsVO;
+import jakarta.servlet.http.HttpServletResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -111,5 +113,17 @@ public class EmpController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(empService.deleteEmpByIds(ids));
+    }
+
+    /**
+     * 统计员工数量
+     */
+    @ApiOperation("统计员工数量")
+    @PreAuthorize("@ss.hasPermi('manager:emp:query')")
+    @GetMapping("/statistics")
+    public R<EmpStatisticsVO> statistics()
+    {
+        EmpStatisticsVO empStatisticsVO = empService.statistics();
+        return R.ok(empStatisticsVO);
     }
 }

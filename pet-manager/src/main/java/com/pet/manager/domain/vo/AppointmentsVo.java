@@ -6,6 +6,8 @@ import com.pet.manager.domain.ServiceTypes;
 import com.pet.manager.domain.Users;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class AppointmentsVo extends Appointments {
 
@@ -17,4 +19,8 @@ public class AppointmentsVo extends Appointments {
 
     //服务类型信息
     private ServiceTypes serviceTypes;
+
+    //今日时间
+    private LocalDateTime begin;
+    private LocalDateTime end;
 }

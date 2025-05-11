@@ -49,7 +49,7 @@ public class TestController extends BaseController
     @ApiOperation("获取用户详细")
     @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "path", dataTypeClass = Integer.class)
     @GetMapping("/{userId}")
-    public R<UserEntity> getUser(@PathVariable Integer userId)
+    public R<UserEntity> getUser(@PathVariable("userId") Integer userId)
     {
         if (!users.isEmpty() && users.containsKey(userId))
         {
@@ -99,7 +99,7 @@ public class TestController extends BaseController
     @ApiOperation("删除用户信息")
     @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "path", dataTypeClass = Integer.class)
     @DeleteMapping("/{userId}")
-    public R<String> delete(@PathVariable Integer userId)
+    public R<String> delete(@PathVariable("userId") Integer userId)
     {
         if (!users.isEmpty() && users.containsKey(userId))
         {

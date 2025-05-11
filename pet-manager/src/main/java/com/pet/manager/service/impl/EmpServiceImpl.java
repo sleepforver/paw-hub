@@ -5,6 +5,7 @@ import java.util.List;
 import com.pet.common.exception.ServiceException;
 import com.pet.common.utils.DateUtils;
 import com.pet.manager.domain.Role;
+import com.pet.manager.domain.vo.EmpStatisticsVO;
 import com.pet.manager.mapper.RoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -110,5 +111,16 @@ public class EmpServiceImpl implements IEmpService
     public int deleteEmpById(Long id)
     {
         return empMapper.deleteEmpById(id);
+    }
+
+    /**
+     * 统计员工数量
+     * @return
+     */
+    @Override
+    public EmpStatisticsVO statistics() {
+        EmpStatisticsVO empStatisticsVO = new EmpStatisticsVO();
+        empStatisticsVO.setTotalCount(empMapper.countEmp());
+        return empStatisticsVO;
     }
 }

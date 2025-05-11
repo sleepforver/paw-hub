@@ -2,18 +2,19 @@ package com.pet.manager.service;
 
 import java.util.List;
 import com.pet.manager.domain.Emp;
+import com.pet.manager.domain.vo.EmpStatisticsVO;
 
 /**
  * 员工列表Service接口
- * 
+ *
  * @author kkk
  * @date 2025-02-27
  */
-public interface IEmpService 
+public interface IEmpService
 {
     /**
      * 查询员工列表
-     * 
+     *
      * @param id 员工列表主键
      * @return 员工列表
      */
@@ -21,7 +22,7 @@ public interface IEmpService
 
     /**
      * 查询员工列表列表
-     * 
+     *
      * @param emp 员工列表
      * @return 员工列表集合
      */
@@ -29,7 +30,7 @@ public interface IEmpService
 
     /**
      * 新增员工列表
-     * 
+     *
      * @param emp 员工列表
      * @return 结果
      */
@@ -37,7 +38,7 @@ public interface IEmpService
 
     /**
      * 修改员工列表
-     * 
+     *
      * @param emp 员工列表
      * @return 结果
      */
@@ -45,7 +46,7 @@ public interface IEmpService
 
     /**
      * 批量删除员工列表
-     * 
+     *
      * @param ids 需要删除的员工列表主键集合
      * @return 结果
      */
@@ -53,9 +54,15 @@ public interface IEmpService
 
     /**
      * 删除员工列表信息
-     * 
+     *
      * @param id 员工列表主键
      * @return 结果
      */
     public int deleteEmpById(Long id);
+
+    /**
+     * 统计员工数量
+     * @return
+     */
+    EmpStatisticsVO statistics();
 }

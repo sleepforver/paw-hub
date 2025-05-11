@@ -1,6 +1,9 @@
 package com.pet.manager.service.impl;
 
 import java.util.List;
+
+import com.pet.common.constant.PawHubConstants;
+import com.pet.manager.domain.vo.PetStatisticsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.pet.manager.mapper.PetsMapper;
@@ -9,19 +12,19 @@ import com.pet.manager.service.IPetsService;
 
 /**
  * 宠物管理Service业务层处理
- * 
+ *
  * @author kkk
  * @date 2025-02-17
  */
 @Service
-public class PetsServiceImpl implements IPetsService 
+public class PetsServiceImpl implements IPetsService
 {
     @Autowired
     private PetsMapper petsMapper;
 
     /**
      * 查询宠物管理
-     * 
+     *
      * @param petId 宠物管理主键
      * @return 宠物管理
      */
@@ -33,7 +36,7 @@ public class PetsServiceImpl implements IPetsService
 
     /**
      * 查询宠物管理列表
-     * 
+     *
      * @param pets 宠物管理
      * @return 宠物管理
      */
@@ -45,7 +48,7 @@ public class PetsServiceImpl implements IPetsService
 
     /**
      * 新增宠物管理
-     * 
+     *
      * @param pets 宠物管理
      * @return 结果
      */
@@ -57,7 +60,7 @@ public class PetsServiceImpl implements IPetsService
 
     /**
      * 修改宠物管理
-     * 
+     *
      * @param pets 宠物管理
      * @return 结果
      */
@@ -69,7 +72,7 @@ public class PetsServiceImpl implements IPetsService
 
     /**
      * 批量删除宠物管理
-     * 
+     *
      * @param petIds 需要删除的宠物管理主键
      * @return 结果
      */
@@ -81,7 +84,7 @@ public class PetsServiceImpl implements IPetsService
 
     /**
      * 删除宠物管理信息
-     * 
+     *
      * @param petId 宠物管理主键
      * @return 结果
      */
@@ -89,5 +92,18 @@ public class PetsServiceImpl implements IPetsService
     public int deletePetsByPetId(Long petId)
     {
         return petsMapper.deletePetsByPetId(petId);
+    }
+
+    /**
+     * 统计宠物数量
+     * @return
+     */
+    @Override
+    public PetStatisticsVO statistics() {
+        PetStatisticsVO petStatisticsVO = new PetStatisticsVO();
+        petStatisticsVO.setPetCount(petsMapper.countPets());
+        petStatisticsVO.setDogCount(petsMapper.countSpecies(PawHubConstants.PET_TYPE_DOG));
+        petStatisticsVO.setCatCount(petsMapper.countSpecies(PawHubConstants.PET_TYPE_CAT));
+        return petStatisticsVO;
     }
 }
