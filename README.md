@@ -296,7 +296,7 @@ java -jar pet-admin/target/pet-admin.jar
 
 - **项目地址**: [GitHub](https://github.com/your-username/pet-test)
 - **问题反馈**: [Issues](https://github.com/your-username/pet-test/issues)
-- **邮箱**: your-email@example.com
+- **邮箱**: 2076223883@example.com
 
 ---
 
