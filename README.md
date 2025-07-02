@@ -296,12 +296,10 @@ java -jar pet-admin/target/pet-admin.jar
 
 - **项目地址**: [GitHub](https://github.com/your-username/pet-test)
 - **问题反馈**: [Issues](https://github.com/your-username/pet-test/issues)
-- **邮箱**: 2076223883@qq.com
+- **邮箱**: your-email@example.com
 
 ---
-## 具体演示图片 ##
-![img.png](img.png)![img_1.png](img_1.png)![img_2.png](img_2.png)
-![img_3.png](img_3.png)![img_4.png](img_4.png)![img_5.png](img_5.png)
+
 <div align="center">
 
 **如果这个项目对您有帮助，请给个 ⭐️ 支持一下！**
