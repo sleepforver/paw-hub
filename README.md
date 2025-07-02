@@ -292,11 +292,20 @@ java -jar pet-admin/target/pet-admin.jar
 - 感谢 [RuoYi](http://ruoyi.vip/) 开源框架提供的技术支持
 - 感谢所有为项目做出贡献的开发者
 
+## 运行图片
+![image](https://github.com/user-attachments/assets/2c41d9ff-fb9b-4873-9b9d-1c4e799ae462) ![image](https://github.com/user-attachments/assets/74e61df9-fc54-4439-956a-4c34c3db244e)![image](https://github.com/user-attachments/assets/4b219a5c-f14c-4370-8295-bacac6c3e160)
+![image](https://github.com/user-attachments/assets/85feae09-d3ed-460d-897b-a233dd24418a)![image](https://github.com/user-attachments/assets/5ab84e5d-11e7-49a1-a98f-aa24d8ba4892)![image](https://github.com/user-attachments/assets/534c0ea6-d7e6-49a3-bc82-b287d2b840ec)
+
+
+
+
+
+
 ## 📞 联系我们
 
-- **项目地址**: [GitHub](https://github.com/your-username/pet-test)
-- **问题反馈**: [Issues](https://github.com/your-username/pet-test/issues)
-- **邮箱**: your-email@example.com
+- **项目地址**: [GitHub](https://github.com/sleepforver/paw-hub)
+- **问题反馈**: [Issues]https://github.com/sleepforver/paw-hub/issues)
+- **邮箱**: 2076223883@qq.com
 
 ---
 
