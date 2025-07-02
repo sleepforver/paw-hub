@@ -1,95 +1,307 @@
-<p align="center">
-	<img alt="logo" src="https://oscimg.oschina.net/oscnet/up-d3d0a9303e11d522a06cd263f3079027715.png">
-</p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">RuoYi v3.8.9</h1>
-<h4 align="center">基于SpringBoot+Vue前后端分离的Java快速开发框架</h4>
-<p align="center">
-	<a href="https://gitee.com/y_project/RuoYi-Vue/stargazers"><img src="https://gitee.com/y_project/RuoYi-Vue/badge/star.svg?theme=dark"></a>
-	<a href="https://gitee.com/y_project/RuoYi-Vue"><img src="https://img.shields.io/badge/RuoYi-v3.8.9-brightgreen.svg"></a>
-	<a href="https://gitee.com/y_project/RuoYi-Vue/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
-</p>
+# 🐾 PetCareMaster - 宠物管理系统
 
-## 平台简介
+<div align="center">
 
-若依是一套全部开源的快速开发平台，毫无保留给个人及企业免费使用。
+![Java](https://img.shields.io/badge/Java-17-orange.svg)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.4-brightgreen.svg)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-blue.svg)
+![Redis](https://img.shields.io/badge/Redis-6.0-red.svg)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
-* 前端采用Vue、Element UI。
-* 后端采用Spring Boot、Spring Security、Redis & Jwt。
-* 权限认证使用Jwt，支持多终端认证系统。
-* 支持加载动态权限菜单，多方式轻松权限控制。
-* 高效率开发，使用代码生成器可以一键生成前后端代码。
-* 提供了技术栈（[Vue3](https://v3.cn.vuejs.org) [Element Plus](https://element-plus.org/zh-CN) [Vite](https://cn.vitejs.dev)）版本[RuoYi-Vue3](https://gitcode.com/yangzongzhuan/RuoYi-Vue3)，保持同步更新。
-* 提供了单应用版本[RuoYi-Vue-fast](https://gitcode.com/yangzongzhuan/RuoYi-Vue-fast)，Oracle版本[RuoYi-Vue-Oracle](https://gitcode.com/yangzongzhuan/RuoYi-Vue-Oracle)，保持同步更新。
-* 不分离版本，请移步[RuoYi](https://gitee.com/y_project/RuoYi)，微服务版本，请移步[RuoYi-Cloud](https://gitee.com/y_project/RuoYi-Cloud)
-* 阿里云折扣场：[点我进入](http://aly.ruoyi.vip)，腾讯云秒杀场：[点我进入](http://txy.ruoyi.vip)&nbsp;&nbsp;
+**基于 Spring Boot 3.x + Vue 3.x 的现代化宠物管理平台**
 
-## 内置功能
+</div>
 
-1.  用户管理：用户是系统操作者，该功能主要完成系统用户配置。
-2.  部门管理：配置系统组织机构（公司、部门、小组），树结构展现支持数据权限。
-3.  岗位管理：配置系统用户所属担任职务。
-4.  菜单管理：配置系统菜单，操作权限，按钮权限标识等。
-5.  角色管理：角色菜单权限分配、设置角色按机构进行数据范围权限划分。
-6.  字典管理：对系统中经常使用的一些较为固定的数据进行维护。
-7.  参数管理：对系统动态配置常用参数。
-8.  通知公告：系统通知公告信息发布维护。
-9.  操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。
-10. 登录日志：系统登录日志记录查询包含登录异常。
-11. 在线用户：当前系统中活跃用户状态监控。
-12. 定时任务：在线（添加、修改、删除)任务调度包含执行结果日志。
-13. 代码生成：前后端代码的生成（java、html、xml、sql）支持CRUD下载 。
-14. 系统接口：根据业务代码自动生成相关的api接口文档。
-15. 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
-16. 缓存监控：对系统的缓存信息查询，命令统计等。
-17. 在线构建器：拖动表单元素生成相应的HTML代码。
-18. 连接池监视：监视当前系统数据库连接池状态，可进行分析SQL找出系统性能瓶颈。
+## 📖 项目简介
 
-## 在线体验
+PetCareMaster（爪聚）是一个功能完善的宠物管理系统，专为宠物店、宠物医院、宠物寄养中心等机构设计。系统采用前后端分离架构，基于 Spring Boot 3.x 和 Vue 3.x 技术栈构建，提供宠物管理、预约服务、健康记录、订单管理等核心功能。
 
-- admin/admin123  
-- 陆陆续续收到一些打赏，为了更好的体验已用于演示服务器升级。谢谢各位小伙伴。
+### ✨ 核心特性
 
-演示地址：http://vue.ruoyi.vip  
-文档地址：http://doc.ruoyi.vip
+- 🐕 **宠物管理**：完整的宠物信息管理，包括基本信息、健康记录、疫苗接种等
+- 📅 **预约服务**：灵活的预约系统，支持多种服务类型预约
+- 💊 **健康管理**：AI 驱动的宠物健康分析和建议
+- 🏠 **寄养服务**：专业的寄养房间管理和服务
+- 💰 **订单管理**：完整的订单流程和支付管理
+- 👥 **用户管理**：多角色用户权限管理
+- 📊 **数据统计**：实时数据分析和报表
+- 🤖 **AI 智能**：集成多种 AI 模型，提供智能服务
 
-## 演示图
+## 🏗️ 技术架构
 
-<table>
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/cd1f90be5f2684f4560c9519c0f2a232ee8.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/1cbcf0e6f257c7d3a063c0e3f2ff989e4b3.jpg"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-8074972883b5ba0622e13246738ebba237a.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-9f88719cdfca9af2e58b352a20e23d43b12.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-39bf2584ec3a529b0d5a3b70d15c9b37646.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-936ec82d1f4872e1bc980927654b6007307.png"/></td>
-    </tr>
-	<tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-b2d62ceb95d2dd9b3fbe157bb70d26001e9.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-d67451d308b7a79ad6819723396f7c3d77a.png"/></td>
-    </tr>	 
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/5e8c387724954459291aafd5eb52b456f53.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/644e78da53c2e92a95dfda4f76e6d117c4b.jpg"/></td>
-    </tr>
-	<tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-8370a0d02977eebf6dbf854c8450293c937.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-49003ed83f60f633e7153609a53a2b644f7.png"/></td>
-    </tr>
-	<tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-d4fe726319ece268d4746602c39cffc0621.png"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-c195234bbcd30be6927f037a6755e6ab69c.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://oscimg.oschina.net/oscnet/b6115bc8c31de52951982e509930b20684a.jpg"/></td>
-        <td><img src="https://oscimg.oschina.net/oscnet/up-5e4daac0bb59612c5038448acbcef235e3a.png"/></td>
-    </tr>
-</table>
+### 后端技术栈
 
+| 技术 | 版本 | 说明 |
+|------|------|------|
+| Spring Boot | 3.4.4 | 主框架 |
+| Spring Security | 6.2.0 | 安全框架 |
+| MyBatis | 3.0.3 | ORM 框架 |
+| MySQL | 8.0.33 | 数据库 |
+| Redis | 6.0+ | 缓存数据库 |
+| Druid | 1.2.21 | 数据库连接池 |
+| JWT | 0.9.1 | 身份认证 |
+| Swagger | 3.0.0 | API 文档 |
+| Spring AI | 1.0.0-M6 | AI 集成 |
 
-## 若依前后端分离交流群
+### 前端技术栈
 
-QQ群： [![加入QQ群](https://img.shields.io/badge/已满-937441-blue.svg)](https://jq.qq.com/?_wv=1027&k=5bVB1og) [![加入QQ群](https://img.shields.io/badge/已满-887144332-blue.svg)](https://jq.qq.com/?_wv=1027&k=5eiA4DH) [![加入QQ群](https://img.shields.io/badge/已满-180251782-blue.svg)](https://jq.qq.com/?_wv=1027&k=5AxMKlC) [![加入QQ群](https://img.shields.io/badge/已满-104180207-blue.svg)](https://jq.qq.com/?_wv=1027&k=51G72yr) [![加入QQ群](https://img.shields.io/badge/已满-186866453-blue.svg)](https://jq.qq.com/?_wv=1027&k=VvjN2nvu) [![加入QQ群](https://img.shields.io/badge/已满-201396349-blue.svg)](https://jq.qq.com/?_wv=1027&k=5vYAqA05) [![加入QQ群](https://img.shields.io/badge/已满-101456076-blue.svg)](https://jq.qq.com/?_wv=1027&k=kOIINEb5) [![加入QQ群](https://img.shields.io/badge/已满-101539465-blue.svg)](https://jq.qq.com/?_wv=1027&k=UKtX5jhs) [![加入QQ群](https://img.shields.io/badge/已满-264312783-blue.svg)](https://jq.qq.com/?_wv=1027&k=EI9an8lJ) [![加入QQ群](https://img.shields.io/badge/已满-167385320-blue.svg)](https://jq.qq.com/?_wv=1027&k=SWCtLnMz) [![加入QQ群](https://img.shields.io/badge/已满-104748341-blue.svg)](https://jq.qq.com/?_wv=1027&k=96Dkdq0k) [![加入QQ群](https://img.shields.io/badge/已满-160110482-blue.svg)](https://jq.qq.com/?_wv=1027&k=0fsNiYZt) [![加入QQ群](https://img.shields.io/badge/已满-170801498-blue.svg)](https://jq.qq.com/?_wv=1027&k=7xw4xUG1) [![加入QQ群](https://img.shields.io/badge/已满-108482800-blue.svg)](https://jq.qq.com/?_wv=1027&k=eCx8eyoJ) [![加入QQ群](https://img.shields.io/badge/已满-101046199-blue.svg)](https://jq.qq.com/?_wv=1027&k=SpyH2875) [![加入QQ群](https://img.shields.io/badge/已满-136919097-blue.svg)](https://jq.qq.com/?_wv=1027&k=tKEt51dz) [![加入QQ群](https://img.shields.io/badge/已满-143961921-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=0vBbSb0ztbBgVtn3kJS-Q4HUNYwip89G&authKey=8irq5PhutrZmWIvsUsklBxhj57l%2F1nOZqjzigkXZVoZE451GG4JHPOqW7AW6cf0T&noverify=0&group_code=143961921) [![加入QQ群](https://img.shields.io/badge/已满-174951577-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=ZFAPAbp09S2ltvwrJzp7wGlbopsc0rwi&authKey=HB2cxpxP2yspk%2Bo3WKTBfktRCccVkU26cgi5B16u0KcAYrVu7sBaE7XSEqmMdFQp&noverify=0&group_code=174951577) [![加入QQ群](https://img.shields.io/badge/已满-161281055-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Fn2aF5IHpwsy8j6VlalNJK6qbwFLFHat&authKey=uyIT%2B97x2AXj3odyXpsSpVaPMC%2Bidw0LxG5MAtEqlrcBcWJUA%2FeS43rsF1Tg7IRJ&noverify=0&group_code=161281055) [![加入QQ群](https://img.shields.io/badge/已满-138988063-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=XIzkm_mV2xTsUtFxo63bmicYoDBA6Ifm&authKey=dDW%2F4qsmw3x9govoZY9w%2FoWAoC4wbHqGal%2BbqLzoS6VBarU8EBptIgPKN%2FviyC8j&noverify=0&group_code=138988063) [![加入QQ群](https://img.shields.io/badge/已满-151450850-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=DkugnCg68PevlycJSKSwjhFqfIgrWWwR&authKey=pR1Pa5lPIeGF%2FFtIk6d%2FGB5qFi0EdvyErtpQXULzo03zbhopBHLWcuqdpwY241R%2F&noverify=0&group_code=151450850) [![加入QQ群](https://img.shields.io/badge/已满-224622315-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=F58bgRa-Dp-rsQJThiJqIYv8t4-lWfXh&authKey=UmUs4CVG5OPA1whvsa4uSespOvyd8%2FAr9olEGaWAfdLmfKQk%2FVBp2YU3u2xXXt76&noverify=0&group_code=224622315) [![加入QQ群](https://img.shields.io/badge/已满-287842588-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Nxb2EQ5qozWa218Wbs7zgBnjLSNk_tVT&authKey=obBKXj6SBKgrFTJZx0AqQnIYbNOvBB2kmgwWvGhzxR67RoRr84%2Bus5OadzMcdJl5&noverify=0&group_code=287842588) [![加入QQ群](https://img.shields.io/badge/187944233-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=numtK1M_I4eVd2Gvg8qtbuL8JgX42qNh&authKey=giV9XWMaFZTY%2FqPlmWbkB9g3fi0Ev5CwEtT9Tgei0oUlFFCQLDp4ozWRiVIzubIm&noverify=0&group_code=187944233) 点击按钮入群。
+- **Vue 3.x** - 渐进式 JavaScript 框架
+- **Element Plus** - Vue 3 组件库
+- **Vite** - 构建工具
+- **TypeScript** - 类型安全
+- **Pinia** - 状态管理
+
+## 📁 项目结构
+
+```
+pet-test/
+├── pet-admin/          # 管理后台模块
+├── pet-manager/        # 业务管理模块
+├── pet-framework/      # 核心框架模块
+├── pet-common/         # 公共工具模块
+├── pet-generator/      # 代码生成模块
+├── pet-quartz/         # 定时任务模块
+├── pet-system/         # 系统管理模块
+├── sql/               # 数据库脚本
+├── doc/               # 项目文档
+└── bin/               # 启动脚本
+```
+
+### 模块说明
+
+| 模块 | 功能描述 |
+|------|----------|
+| `pet-admin` | 系统管理后台，提供管理端接口和功能 |
+| `pet-manager` | 核心业务模块，包含宠物、预约、订单等业务逻辑 |
+| `pet-framework` | 系统核心框架，封装通用功能和配置 |
+| `pet-common` | 公共模块，存放工具类、通用实体等 |
+| `pet-generator` | 代码生成模块，支持一键生成业务代码 |
+| `pet-quartz` | 定时任务模块，集成任务调度功能 |
+| `pet-system` | 系统管理模块，包含用户、权限、菜单等基础功能 |
+
+## 🚀 快速开始
+
+### 环境要求
+
+- **JDK**: 17+
+- **Maven**: 3.6+
+- **MySQL**: 8.0+
+- **Redis**: 6.0+
+- **Node.js**: 16+ (前端开发)
+
+### 1. 克隆项目
+
+```bash
+git clone https://github.com/your-username/pet-test.git
+cd pet-test
+```
+
+### 2. 数据库配置
+
+1. 创建数据库：
+```sql
+CREATE DATABASE pet DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+2. 导入数据库脚本：
+```bash
+mysql -u root -p pet < sql/pet.sql
+mysql -u root -p pet < sql/quartz.sql
+```
+
+### 3. 配置文件
+
+修改 `pet-admin/src/main/resources/application-druid.yml`：
+
+```yaml
+spring:
+  datasource:
+    druid:
+      master:
+        url: jdbc:mysql://localhost:3306/pet?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: your-username
+        password: your-password
+```
+
+### 4. 启动项目
+
+#### 方式一：IDE 启动
+1. 使用 IDEA 或 Eclipse 导入项目
+2. 运行 `pet-admin` 模块下的 `PawHubApplication.java`
+
+#### 方式二：命令行启动
+```bash
+# 编译项目
+mvn clean compile
+
+# 启动项目
+mvn spring-boot:run -pl pet-admin
+```
+
+### 5. 访问系统
+
+- **管理后台**: http://localhost:8700
+- **API 文档**: http://localhost:8700/swagger-ui.html
+- **数据库监控**: http://localhost:8700/druid
+
+## 📊 核心功能
+
+### 宠物管理
+- 宠物基本信息管理
+- 宠物健康记录
+- 疫苗接种记录
+- 宠物图片管理
+
+### 预约服务
+- 多种服务类型预约
+- 预约状态管理
+- 预约时间冲突检测
+- 预约提醒功能
+
+### 寄养服务
+- 寄养房间管理
+- 寄养订单处理
+- 房间类型配置
+- 寄养服务统计
+
+### 订单管理
+- 订单创建和跟踪
+- 支付状态管理
+- 订单详情记录
+- 订单统计分析
+
+### AI 智能服务
+- 宠物健康分析
+- 智能建议生成
+- 多模型支持（OpenAI、Qwen、GLM）
+- 健康报告生成
+
+## 🔧 配置说明
+
+### 数据库配置
+```yaml
+spring:
+  datasource:
+    druid:
+      master:
+        url: jdbc:mysql://localhost:3306/pet
+        username: root
+        password: 123456
+```
+
+### Redis 配置
+```yaml
+spring:
+  data:
+    redis:
+      host: 192.168.10.100
+      port: 6379
+      database: 0
+```
+
+### AI 模型配置
+```yaml
+spring:
+  ai:
+    openai:
+      api-key: your-api-key
+      base-url: https://api.siliconflow.cn/
+      chat:
+        options:
+          model: deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+```
+
+### 文件存储配置
+```yaml
+dromara:
+  x-file-storage:
+    default-platform: aliyun-oss-1
+    aliyun-oss:
+      - platform: aliyun-oss-1
+        access-key: your-access-key
+        secret-key: your-secret-key
+        end-point: oss-cn-shenzhen.aliyuncs.com
+        bucket-name: pet-pawhub
+```
+
+## 📝 API 文档
+
+系统集成了 Swagger 3.0，启动后可通过以下地址访问 API 文档：
+
+- **Swagger UI**: http://localhost:8700/swagger-ui.html
+- **API JSON**: http://localhost:8700/v3/api-docs
+
+### 主要 API 接口
+
+| 模块 | 接口前缀 | 说明 |
+|------|----------|------|
+| 宠物管理 | `/pet` | 宠物相关操作 |
+| 预约管理 | `/appointment` | 预约相关操作 |
+| 订单管理 | `/order` | 订单相关操作 |
+| 用户管理 | `/user` | 用户相关操作 |
+| 健康记录 | `/health` | 健康记录相关操作 |
+
+## 🛠️ 开发指南
+
+### 代码生成
+
+系统提供了代码生成功能，可以快速生成 CRUD 代码：
+
+1. 访问代码生成页面
+2. 选择数据表
+3. 配置生成参数
+4. 生成代码并下载
+
+### 自定义开发
+
+1. **添加新模块**：在 `pet-manager` 模块下创建新的包
+2. **数据库设计**：在 `sql/` 目录下添加建表脚本
+3. **API 开发**：遵循 RESTful 规范
+4. **权限配置**：在系统管理中配置菜单和权限
+
+### 部署说明
+
+#### 开发环境
+```bash
+mvn spring-boot:run -pl pet-admin
+```
+
+#### 生产环境
+```bash
+# 打包
+mvn clean package -Dmaven.test.skip=true
+
+# 运行
+java -jar pet-admin/target/pet-admin.jar
+```
+
+## 🤝 贡献指南
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 打开 Pull Request
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+## 🙏 致谢
+
+- 感谢 [RuoYi](http://ruoyi.vip/) 开源框架提供的技术支持
+- 感谢所有为项目做出贡献的开发者
+
+## 📞 联系我们
+
+- **项目地址**: [GitHub](https://github.com/your-username/pet-test)
+- **问题反馈**: [Issues](https://github.com/your-username/pet-test/issues)
+- **邮箱**: your-email@example.com
+
+---
+
+<div align="center">
+
+**如果这个项目对您有帮助，请给个 ⭐️ 支持一下！**
+
+</div>
