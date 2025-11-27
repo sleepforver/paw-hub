@@ -39,7 +39,7 @@ public class RoboflowServiceImpl implements IRoboflowService {
 
     @Override
     public PredictionResultDto runWorkflow(String image) throws IOException {
-        // Validate configuration
+        // 有效验证
         if (config.getApiUrl() == null || config.getApiUrl().isEmpty()) {
             logger.error("Roboflow API URL is not configured");
             throw new IllegalStateException("Roboflow API URL is not configured");
@@ -49,7 +49,7 @@ public class RoboflowServiceImpl implements IRoboflowService {
             throw new IllegalStateException("Roboflow API key is not configured");
         }
 
-        // Build request body with api_key inside the JSON
+        // 构建请求体
         Map<String, Object> requestMap = new HashMap<>();
         requestMap.put("api_key", config.getApiKey());
 

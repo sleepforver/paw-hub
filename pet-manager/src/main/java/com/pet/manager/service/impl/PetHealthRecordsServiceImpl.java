@@ -145,8 +145,8 @@ public class PetHealthRecordsServiceImpl implements IPetHealthRecordsService
             petHealthRecords.setCheckDate(new Date());
             petHealthRecords.setAiDiagnosis(predictionResultDto.getClassName());
             petHealthRecords.setRecommendations(aiAnwer);
-            //如何获取到的predictionResultDto为空或健康，则为0，反之为1
-            if (predictionResultDto != null || !predictionResultDto.getClassName().equals("healthy")) {
+            //如何获取到的predictionResultDto为空并且健康，则为0，反之为1
+            if (predictionResultDto != null && !predictionResultDto.getClassName().equals("healthy")) {
                 petHealthRecords.setStatus(PawHubConstants.HEALTH_STATUS_HEALTHY);
             } else {
                 petHealthRecords.setStatus(PawHubConstants.HEALTH_STATUS_ILL);

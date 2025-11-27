@@ -12,6 +12,7 @@ import com.pet.manager.domain.*;
 import com.pet.manager.domain.vo.AppointmentsStatisticsVO;
 import com.pet.manager.domain.vo.AppointmentsVo;
 import com.pet.manager.mapper.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -87,7 +88,12 @@ public class AppointmentsServiceImpl implements IAppointmentsService
             fosterRooms.setCurrentPetsCount(fosterRooms.getCurrentPetsCount() + 1);
             fosterRoomsMapper.updateFosterRooms(fosterRooms);
         }
+        //如果用户备注不为空，需要进行标签处理
+        if(appointments.getUserInfo() != null){
+            appointments.setUserInfo(getString(appointments.getUserInfo()));
+            mingan(appointments.getUserInfo());
 
+        }
         //先获取服务信息，查询当前的服务是否可用
         Services services = servicesMapper.selectServicesByServiceTypeId(appointments.getServiceTypeId());
         if (Objects.equals(services.getServiceStatus(), PawHubConstants.SERVICE_STATUS_DISABLED) || services.getServiceStatus() == null) {
@@ -96,9 +102,9 @@ public class AppointmentsServiceImpl implements IAppointmentsService
         //检查是否是否有同类型的预约
         hasAppointments(appointments);
 
+
+
         //根据服务类型id来匹配员工id
-
-
         //将一开始的预约订单的状态设置为待确认
         appointments.setStatus(PawHubConstants.Appointment_STATUS_WAIT_CONFIRM);
         //查找Pets表，将对应的userId赋值
@@ -109,6 +115,21 @@ public class AppointmentsServiceImpl implements IAppointmentsService
         return appointmentsMapper.insertAppointments(appointments);
     }
 
+    @NotNull
+    private  String getString(String userInfo) {
+        return userInfo
+                .replace("<p>","")
+               .replace("</p>", "");
+
+    }
+
+    //校验敏感词
+    private void mingan(String userInfo){
+        //敏感词校验
+        if (StrUtil.containsAny(userInfo, PawHubConstants.SENSITIVE_WORD_CONSTITUTION)) {
+            throw new ServiceException("请勿输入敏感词");
+        }
+    }
     /**
      * 修改预约管理
      *

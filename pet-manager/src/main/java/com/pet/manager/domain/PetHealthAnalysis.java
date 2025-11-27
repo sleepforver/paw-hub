@@ -33,6 +33,10 @@ public class PetHealthAnalysis extends BaseEntity
                             @Excel(name = "疾病名称")
         private String diseaseName;
 
+                /** 疾病状态 */
+                            @Excel(name= "疾病状态")
+        private Long diseaseStatus;
+
                 /** AI置信度得分 */
                             @Excel(name = "AI置信度得分")
         private BigDecimal confidenceScore;

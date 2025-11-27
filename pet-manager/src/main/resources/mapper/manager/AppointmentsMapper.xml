@@ -16,6 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="appointmentDate"    column="appointment_date"    />
         <result property="status"    column="status"    />
         <result property="cancelInfo"    column="cancel_info"    />
+        <result property="userInfo"    column="user_info"    />
         <result property="addr"    column="addr"    />
         <result property="createdAt"    column="created_at"    />
         <result property="createdBy"    column="created_by"    />
@@ -38,6 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="status"    column="status"    />
         <result property="cancelInfo"    column="cancel_info"    />
         <result property="addr"    column="addr"    />
+        <result property="userInfo"    column="user_info"    />
         <result property="createdAt"    column="created_at"    />
         <result property="createdBy"    column="created_by"    />
         <result property="updatedAt"    column="updated_at"    />
@@ -53,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectAppointmentsVo">
-        select appointment_id, appointment_no, pet_id, service_type_id, emp_id, room_type, room_number,user_id, appointment_date, status, cancel_info, addr, created_at, created_by, updated_at, updated_by from tb_appointments
+        select appointment_id, appointment_no, pet_id, service_type_id, emp_id, room_type, room_number,user_id, appointment_date, status, cancel_info, addr,user_info, created_at, created_by, updated_at, updated_by from tb_appointments
     </sql>
 
     <select id="selectAppointmentsList" parameterType="Appointments" resultMap="AppointmentsResult">
@@ -70,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">and status = #{status}</if>
             <if test="cancelInfo != null">and cancel_info = #{cancelInfo}</if>
             <if test="addr != null">and addr = #{addr}</if>
+            <if test="userInfo != null">and user_info = #{userInfo}</if>
             <if test="createdAt != null">and created_at = #{createdAt}</if>
             <if test="createdBy != null">and created_by = #{createdBy}</if>
             <if test="updatedAt != null">and updated_at = #{updatedAt}</if>
@@ -101,6 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">and status = #{status}</if>
             <if test="cancelInfo != null">and cancel_info = #{cancelInfo}</if>
             <if test="addr != null">and addr = #{addr}</if>
+            <if test="userInfo != null">and user_info = #{userInfo}</if>
             <if test="createdAt != null">and created_at = #{createdAt}</if>
             <if test="createdBy != null">and created_by = #{createdBy}</if>
             <if test="updatedAt != null">and updated_at = #{updatedAt}</if>
@@ -134,6 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">status,</if>
             <if test="cancelInfo != null">cancel_info,</if>
             <if test="addr != null">addr,</if>
+            <if test="userInfo != null" >user_info,</if>
             <if test="createdAt != null">created_at,</if>
             <if test="createdBy != null">created_by,</if>
             <if test="updatedAt != null">updated_at,</if>
@@ -151,6 +156,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">#{status},</if>
             <if test="cancelInfo != null">#{cancelInfo},</if>
             <if test="addr != null">#{addr},</if>
+            <if test="userInfo != null" >#{userInfo},</if>
             <if test="createdAt != null">#{createdAt},</if>
             <if test="createdBy != null">#{createdBy},</if>
             <if test="updatedAt != null">#{updatedAt},</if>
@@ -172,6 +178,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">status = #{status},</if>
             <if test="cancelInfo != null">cancel_info = #{cancelInfo},</if>
             <if test="addr != null">addr = #{addr},</if>
+            <if test="userInfo != null">user_info = #{userInfo},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
             <if test="createdBy != null">created_by = #{createdBy},</if>
             <if test="updatedAt != null">updated_at = #{updatedAt},</if>

@@ -87,7 +87,6 @@ pet-test/
 - **Maven**: 3.6+
 - **MySQL**: 8.0+
 - **Redis**: 6.0+
-- **Node.js**: 16+ (前端开发)
 
 ### 1. 克隆项目
 
@@ -294,9 +293,9 @@ java -jar pet-admin/target/pet-admin.jar
 
 ## 📞 联系我们
 
-- **项目地址**: [GitHub](https://github.com/your-username/pet-test)
-- **问题反馈**: [Issues](https://github.com/your-username/pet-test/issues)
-- **邮箱**: your-email@example.com
+- **项目地址**: [GitHub](https://github.com/sleepforver/paw-hub)
+- **问题反馈**: [Issues]https://github.com/sleepforver/paw-hub/issues)
+- **邮箱**: 2076223883@qq.com
 
 ---
 

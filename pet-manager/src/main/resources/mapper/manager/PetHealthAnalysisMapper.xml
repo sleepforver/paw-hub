@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="analysisId"    column="analysis_id"    />
         <result property="recordId"    column="record_id"    />
         <result property="diseaseName"    column="disease_name"    />
+        <result property="diseaseStatus" column="disease_status" />
         <result property="confidenceScore"    column="confidence_score"    />
         <result property="detectedFeatures"    column="detected_features"    />
         <result property="analysisDetails"    column="analysis_details"    />
@@ -16,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPetHealthAnalysisVo">
-        select analysis_id, record_id, disease_name, confidence_score, detected_features, analysis_details, created_at, updated_at from tb_pet_health_ai_analysis
+        select analysis_id, record_id, disease_name, confidence_score, detected_features,disease_status, analysis_details, created_at, updated_at from tb_pet_health_ai_analysis
     </sql>
 
     <select id="selectPetHealthAnalysisList" parameterType="PetHealthAnalysis" resultMap="PetHealthAnalysisResult">
@@ -25,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="recordId != null "> and record_id = #{recordId}</if>
             <if test="diseaseName != null  and diseaseName != ''"> and disease_name like concat('%', #{diseaseName}, '%')</if>
             <if test="confidenceScore != null "> and confidence_score = #{confidenceScore}</if>
+             <if test="diseaseStatus != null "> and disease_status = #{diseaseStatus}</if>
             <if test="detectedFeatures != null  and detectedFeatures != ''"> and detected_features = #{detectedFeatures}</if>
             <if test="analysisDetails != null  and analysisDetails != ''"> and analysis_details = #{analysisDetails}</if>
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
@@ -42,6 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="recordId != null">record_id,</if>
             <if test="diseaseName != null">disease_name,</if>
+            <if test="diseaseStatus != null">disease_status,</if>
             <if test="confidenceScore != null">confidence_score,</if>
             <if test="detectedFeatures != null">detected_features,</if>
             <if test="analysisDetails != null">analysis_details,</if>
@@ -51,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="recordId != null">#{recordId},</if>
             <if test="diseaseName != null">#{diseaseName},</if>
+            <if test="diseaseStatus != null">#{diseaseStatus},</if>
             <if test="confidenceScore != null">#{confidenceScore},</if>
             <if test="detectedFeatures != null">#{detectedFeatures},</if>
             <if test="analysisDetails != null">#{analysisDetails},</if>
@@ -64,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="recordId != null">record_id = #{recordId},</if>
             <if test="diseaseName != null">disease_name = #{diseaseName},</if>
+            <if test="diseaseStatus != null">disease_status = #{diseaseStatus},</if>
             <if test="confidenceScore != null">confidence_score = #{confidenceScore},</if>
             <if test="detectedFeatures != null">detected_features = #{detectedFeatures},</if>
             <if test="analysisDetails != null">analysis_details = #{analysisDetails},</if>

@@ -98,6 +98,16 @@ public class PawHubConstants {
     public static final Long HEALTH_STATUS_ILL = 1l;
 
     /**
+     * 检测状态 检测中
+     */
+    public static final Long CHECK_STATUS_IN_PROGRESS = 2l;
+
+    /**
+     * 检测状态 检测完成
+     */
+    public static final Long CHECK_STATUS_COMPLETED = 3l;
+
+    /**
      * 宠物类型 狗
      */
     public static final Long PET_TYPE_DOG = 1l;
@@ -105,4 +115,9 @@ public class PawHubConstants {
      * 宠物类型 猫
      */
     public static final Long PET_TYPE_CAT = 0l;
+
+    /**
+     * 敏感词 ：共产党
+     */
+    public static final String SENSITIVE_WORD_CONSTITUTION = "共产党";
 }

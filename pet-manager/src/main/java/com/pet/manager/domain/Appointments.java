@@ -66,6 +66,9 @@ public class Appointments extends BaseEntity
                             @Excel(name = "预约地址")
         private String addr;
 
+                            @Excel(name = "用户备注")
+        private String userInfo;
+
                 /** 记录创建时间，默认为当前时间 */
                     private Date createdAt;
 
