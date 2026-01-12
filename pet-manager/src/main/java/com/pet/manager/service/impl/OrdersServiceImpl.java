@@ -6,12 +6,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import com.pet.common.constant.PawHubConstants;
 import com.pet.common.exception.ServiceException;
-import com.pet.common.utils.DateUtils;
 import com.pet.common.utils.SnowflakeIdGenerator;
 import com.pet.common.utils.StringUtils;
 import com.pet.manager.domain.Policy;
@@ -90,22 +88,32 @@ public class OrdersServiceImpl implements IOrdersService
     {
         //检查一致性
         checkCreateOrder(orders);
-        //从获取的服务名称，查询服务类型信息
-        ServiceTypes serviceTypes = serviceTypesMapper.selectServiceTypesByServiceName(orders.getServiceName());
         //订单id，由雪花算法生成
         orders.setOrderId(Long.valueOf(idGenerator.nextIdStr()));
         // 组合用户ID/服务类型等业务因子
-        String datePart = DateUtils.getDate().replaceAll("-", "");
-        String userPart = serviceTypes.getServiceTypeCode(); // 取服务类型编号
-        String randomPart = String.format("%04d", ThreadLocalRandom.current().nextInt(10000));
-        String orderNo = datePart + userPart + randomPart; // 2025022511117162
-        orders.setOrderNo(Long.valueOf(orderNo));
+//        String datePart = DateUtils.getDate().replaceAll("-", "");
+//        String userPart = serviceTypes.getServiceTypeCode(); // 取服务类型编号
+//        String randomPart = String.format("%04d", ThreadLocalRandom.current().nextInt(10000));
+//        String orderNo = datePart + userPart + randomPart; // 2025022511117162
+        orders.setOrderNo(orders.getOrderNo());
         //设置服务类型编号
-        orders.setServiceTypeCode(serviceTypes.getServiceTypeCode());
+//        orders.setServiceTypeCode(serviceTypes.getServiceTypeCode());
+        //设置服务信息
+        setServices(orders);
+        //设置支付状态为未支付
+        orders.setPayStatus(PawHubConstants.PAY_STATUS_UNPAID);
+        //设置订单状态为未支付
+        orders.setOrderStatus(PawHubConstants.ORDER_STATUS_UNPAID);
+        return ordersMapper.insertOrders(orders);
+    }
+
+    private void setServices(Orders orders) {
+        //从获取的服务名称，查询服务类型信息
+        ServiceTypes serviceTypes = serviceTypesMapper.selectServiceTypesByServiceName(orders.getServiceName());
         //从获取的服务名称，查询服务信息
         Services services = servicesMapper.selectServicesByServiceTypeId(serviceTypes.getServiceTypeId());
         //设置服务id
-        orders.setServiceId(services.getServiceId());
+//        orders.setServiceId(services.getServiceId());
         //判断订单类型，如果订单类型为寄养，则需要填写相应的房间号和房间类型
         if (Objects.equals(orders.getOrderType(), PawHubConstants.ORDER_TYPE_FOSTER)) {
             //设置房间类型
@@ -130,11 +138,6 @@ public class OrdersServiceImpl implements IOrdersService
             //如果策略id为空，则订单金额就是订单金额
             orders.setAmount(serviceTypes.getPrice());
         }
-        //设置支付状态为未支付
-        orders.setPayStatus(PawHubConstants.PAY_STATUS_UNPAID);
-        //设置订单状态为未支付
-        orders.setOrderStatus(PawHubConstants.ORDER_STATUS_UNPAID);
-        return ordersMapper.insertOrders(orders);
     }
 
 
@@ -147,7 +150,21 @@ public class OrdersServiceImpl implements IOrdersService
     @Override
     public int updateOrders(Orders orders)
     {
+        setServices(orders);
         return ordersMapper.updateOrders(orders);
+    }
+
+    /**
+     * 通过订单编号修改订单管理
+     *
+     * @param orders 订单管理
+     * @return 结果
+     */
+    @Override
+    public int updateOrdersByOrderNo(Orders orders)
+    {
+        setServices(orders);
+        return ordersMapper.updateOrdersByOrderNo(orders);
     }
 
     /**
@@ -199,7 +216,7 @@ public class OrdersServiceImpl implements IOrdersService
     public int cancel(Orders orders) {
         if (orders.getOrderStatus() == PawHubConstants.ORDER_STATUS_UNPAID  && orders.getOrderStatus() != null){
             orders.setOrderStatus(PawHubConstants.ORDER_STATUS_SERVICE_CANCELLED);
-        }else  if ( orders.getOrderStatus() == PawHubConstants.ORDER_STATUS_PAID && orders.getOrderStatus() != null){
+        }else if ( orders.getOrderStatus() == PawHubConstants.ORDER_STATUS_PAID && orders.getOrderStatus() != null){
             refund(orders);
         }else {
             throw new  ServiceException("订单状态错误");

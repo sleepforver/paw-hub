@@ -75,5 +75,10 @@ public interface FosterRoomsMapper
      */
     FosterRooms selectFosterRoomsByRoomNumber(Long roomNumber);
 
-
+    /**
+     * 根据房间编号增加当前宠物数量
+     * @param roomNumber
+     * @return
+     */
+    int incrementCurrentPetsCount(Long roomNumber);
 }

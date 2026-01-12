@@ -96,8 +96,7 @@ public class OrdersController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Orders orders)
     {
-        //当前登录用户id
-        orders.setUserId(SecurityUtils.getLoginUser().getUserId());
+
         return toAjax(ordersService.insertOrders(orders));
     }
 

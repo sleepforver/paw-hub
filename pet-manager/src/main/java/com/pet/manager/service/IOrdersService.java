@@ -48,6 +48,14 @@ public interface IOrdersService
     public int updateOrders(Orders orders);
 
     /**
+     * 通过订单编号修改订单管理
+     *
+     * @param orders 订单管理
+     * @return 结果
+     */
+    int updateOrdersByOrderNo(Orders orders);
+
+    /**
      * 批量删除订单管理
      *
      * @param orderIds 需要删除的订单管理主键集合

@@ -96,6 +96,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where foster_room_id = #{fosterRoomId}
     </update>
+    <update id="incrementCurrentPetsCount">
+        update tb_foster_rooms
+        set current_pets_count = current_pets_count + 1
+        where foster_room_id = #{fosterRoomId}
+        AND current_pets_count &lt; max_pets_per_room
+    </update>
 
     <delete id="deleteFosterRoomsByFosterRoomId" parameterType="Long">
         delete from tb_foster_rooms where foster_room_id = #{fosterRoomId}

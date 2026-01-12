@@ -8,12 +8,17 @@ import cn.hutool.core.util.StrUtil;
 import com.pet.common.constant.PawHubConstants;
 import com.pet.common.exception.ServiceException;
 import com.pet.common.utils.DateUtils;
+import com.pet.common.utils.HtmlCleanUtils;
+import com.pet.common.utils.SensitiveInfoUtils;
+import com.pet.manager.controller.OrdersController;
 import com.pet.manager.domain.*;
 import com.pet.manager.domain.vo.AppointmentsStatisticsVO;
 import com.pet.manager.domain.vo.AppointmentsVo;
 import com.pet.manager.mapper.*;
+import com.pet.manager.service.IOrdersService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.pet.manager.service.IAppointmentsService;
@@ -42,6 +47,16 @@ public class AppointmentsServiceImpl implements IAppointmentsService
 
     @Autowired
     private FosterRoomsMapper fosterRoomsMapper;
+
+    @Autowired
+    private IOrdersService ordersService;
+
+    @Autowired
+    private OrdersMapper ordersMapper;
+
+    @Autowired
+    private ServiceTypesMapper serviceTypesMapper;
+
     /**
      * 查询预约管理
      *
@@ -68,7 +83,7 @@ public class AppointmentsServiceImpl implements IAppointmentsService
 
     /**
      * 新增预约管理
-     *
+     * 新增预约时，同时新增对应的订单
      * @param appointments 预约管理
      * @return 结果
      */
@@ -78,31 +93,31 @@ public class AppointmentsServiceImpl implements IAppointmentsService
     {
         //如果房间类型不为空
         if (appointments.getRoomType() != null) {
-            //1.查询房间类型信息
-            FosterRooms fosterRooms = fosterRoomsMapper.selectFosterRoomsByRoomNumber(appointments.getRoomNumber());
-            //2.检查房间是否到达最大容量
-            if (fosterRooms.getCurrentPetsCount() >= fosterRooms.getMaxPetsPerRoom()) {
-                throw new ServiceException("当前房间已满员，请选择其他房间");
+            // 直接原子更新
+            int affectedRows = fosterRoomsMapper.incrementCurrentPetsCount(appointments.getRoomNumber());
+
+            if (affectedRows == 0) {
+                // 更新失败，可能是因为房间已满或不存在
+                FosterRooms fosterRooms = fosterRoomsMapper.selectFosterRoomsByRoomNumber(appointments.getRoomNumber());
+
+                if (fosterRooms == null) {
+                    throw new ServiceException("房间不存在");
+                } else if (fosterRooms.getCurrentPetsCount() >= fosterRooms.getMaxPetsPerRoom()) {
+                    throw new ServiceException("当前房间已满员，请选择其他房间");
+                } else {
+                    throw new ServiceException("更新失败，请重试");
+                }
             }
-            //3.将当前宠物数量加1
-            fosterRooms.setCurrentPetsCount(fosterRooms.getCurrentPetsCount() + 1);
-            fosterRoomsMapper.updateFosterRooms(fosterRooms);
         }
         //如果用户备注不为空，需要进行标签处理
         if(appointments.getUserInfo() != null){
-            appointments.setUserInfo(getString(appointments.getUserInfo()));
-            mingan(appointments.getUserInfo());
-
+            appointments.setUserInfo(HtmlCleanUtils.cleanHtml(appointments.getUserInfo()));
         }
         //先获取服务信息，查询当前的服务是否可用
-        Services services = servicesMapper.selectServicesByServiceTypeId(appointments.getServiceTypeId());
-        if (Objects.equals(services.getServiceStatus(), PawHubConstants.SERVICE_STATUS_DISABLED) || services.getServiceStatus() == null) {
-             throw new ServiceException("当前服务不能使用，请另选其他服务");
-        }
+        Orders orders = new Orders();
+        setServiceInfo(appointments, orders);
         //检查是否是否有同类型的预约
         hasAppointments(appointments);
-
-
 
         //根据服务类型id来匹配员工id
         //将一开始的预约订单的状态设置为待确认
@@ -112,24 +127,46 @@ public class AppointmentsServiceImpl implements IAppointmentsService
         appointments.setUserId(pets.getUserId());
         //生成订单编号（为当前的时间戳)
         appointments.setAppointmentNo(generateAppointmentsNo());
-        return appointmentsMapper.insertAppointments(appointments);
+        int insertAppointments = appointmentsMapper.insertAppointments(appointments);
+
+        //获取到插入的预约信息查询，然后将信息同步到订单表中
+        Appointments appointmentsById = appointmentsMapper.selectAppointmentsByAppointmentId(appointments.getAppointmentId());
+        //同时生成订单信息
+        orders.setOrderNo(Long.valueOf(appointmentsById.getAppointmentNo()));
+        orders.setUserId(appointmentsById.getUserId());
+        orders.setEmpId(appointmentsById.getEmpId());
+        ordersService.insertOrders(orders);
+        return insertAppointments;
     }
 
-    @NotNull
-    private  String getString(String userInfo) {
-        return userInfo
-                .replace("<p>","")
-               .replace("</p>", "");
-
-    }
-
-    //校验敏感词
-    private void mingan(String userInfo){
-        //敏感词校验
-        if (StrUtil.containsAny(userInfo, PawHubConstants.SENSITIVE_WORD_CONSTITUTION)) {
-            throw new ServiceException("请勿输入敏感词");
+    private void setServiceInfo(Appointments appointments, Orders orders) {
+        Services services = servicesMapper.selectServicesByServiceTypeId(appointments.getServiceTypeId());
+        if (Objects.equals(services.getServiceStatus(), PawHubConstants.SERVICE_STATUS_DISABLED) || services.getServiceStatus() == null) {
+            throw new ServiceException("当前服务不能使用，请另选其他服务");
+        }else{
+            ServiceTypes serviceTypes = serviceTypesMapper.selectServiceTypesByServiceTypeId(services.getServiceTypeId());
+            orders.setServiceId(services.getServiceId());
+            orders.setServiceTypeCode(serviceTypes.getServiceTypeCode());
+            orders.setServiceName(serviceTypes.getServiceName());
+            orders.setOrderType(Long.valueOf(serviceTypes.getServiceType()));
         }
     }
+
+//    @NotNull
+//    private  String getString(String userInfo) {
+//        return userInfo
+//                .replace("<p>","")
+//               .replace("</p>", "");
+//
+//    }
+
+    //校验敏感词
+//    private void mingan(String userInfo){
+//        //敏感词校验
+//        if (StrUtil.containsAny(userInfo, PawHubConstants.SENSITIVE_WORD_CONSTITUTION)) {
+//            throw new ServiceException("请勿输入敏感词");
+//        }
+//    }
     /**
      * 修改预约管理
      *
@@ -137,9 +174,21 @@ public class AppointmentsServiceImpl implements IAppointmentsService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateAppointments(Appointments appointments)
     {
         appointments.setUpdatedAt(DateUtils.getNowDate());
+        if (appointments.getUserInfo() != null){
+            appointments.setUserInfo(HtmlCleanUtils.cleanHtml(appointments.getUserInfo()));
+        }
+        Orders orders = Orders.builder()
+                .orderNo(Long.valueOf(appointments.getAppointmentNo()))
+                .empId(appointments.getEmpId())
+                .userId(appointments.getUserId())
+                .serviceId(appointments.getServiceTypeId())
+                .build();
+        setServiceInfo(appointments, orders);
+        ordersService.updateOrdersByOrderNo(                                                                                                                                          orders);
         return appointmentsMapper.updateAppointments(appointments);
     }
 
@@ -190,16 +239,28 @@ public class AppointmentsServiceImpl implements IAppointmentsService
         //先判断该预约是否可用取下
         //1.先获取预约信息
         Appointments appointmentsInfo = appointmentsMapper.selectAppointmentsByAppointmentId(appointments.getAppointmentId());
+        checkappointments(appointmentsInfo);
+        //2.设置字段
+        appointments.setStatus(PawHubConstants.Appointment_STATUS_CANCELLED);
+        appointments.setUpdatedAt(DateUtils.getNowDate());
+
+        Orders orders = ordersMapper.selectOrdersByOrderNO(appointmentsInfo.getAppointmentNo());
+        ordersService.cancel(orders);
+        return appointmentsMapper.updateAppointments(appointments);
+    }
+
+    private void checkappointments(Appointments appointments) {
+
         //如果预约为已取消，则抛出异常
-        if (Objects.equals(appointmentsInfo.getStatus(), PawHubConstants.Appointment_STATUS_CANCELLED)) {
+        if (Objects.equals(appointments.getStatus(), PawHubConstants.Appointment_STATUS_CANCELLED)) {
             throw new ServiceException("当前预约已被取消，请勿重复操作");
         }
         //如果预约为已完成，则抛出异常
-        if (Objects.equals(appointmentsInfo.getStatus(), PawHubConstants.Appointment_STATUS_COMPLETED)) {
+        if (Objects.equals(appointments.getStatus(), PawHubConstants.Appointment_STATUS_COMPLETED)) {
             throw new ServiceException("当前预约已完成，请勿重复操作");
         }
         //如果预约为进行中，则抛出异常
-        if (Objects.equals(appointmentsInfo.getStatus(), PawHubConstants.Appointment_STATUS_IN_PROGRESS)) {
+        if (Objects.equals(appointments.getStatus(), PawHubConstants.Appointment_STATUS_IN_PROGRESS)) {
             throw new ServiceException("当前预约正在进行中，请勿重复操作");
         }
         //如果取消预约，则需要将当前宠物数量减1
@@ -210,10 +271,6 @@ public class AppointmentsServiceImpl implements IAppointmentsService
             fosterRooms.setCurrentPetsCount(fosterRooms.getCurrentPetsCount() - 1);
             fosterRoomsMapper.updateFosterRooms(fosterRooms);
         }
-        //2.设置字段
-        appointments.setStatus(PawHubConstants.Appointment_STATUS_CANCELLED);
-        appointments.setUpdatedAt(DateUtils.getNowDate());
-        return appointmentsMapper.updateAppointments(appointments);
     }
 
     @Override

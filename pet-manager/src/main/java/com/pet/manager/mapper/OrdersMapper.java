@@ -50,6 +50,13 @@ public interface OrdersMapper
     public int updateOrders(Orders orders);
 
     /**
+     * 通过订单编号修改订单管理
+     *
+     * @param orders 订单管理
+     * @return 结果
+     */
+    public int updateOrdersByOrderNo(Orders orders);
+    /**
      * 删除订单管理
      *
      * @param orderId 订单管理主键
@@ -79,4 +86,6 @@ public interface OrdersMapper
      * @return
      */
     List<ServicesTop4Dto> getServicesTop4(LocalDateTime begin, LocalDateTime end);
+
+    Orders selectOrdersByOrderNO(String appointmentNo);
 }

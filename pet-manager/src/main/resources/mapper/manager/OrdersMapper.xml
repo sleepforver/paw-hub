@@ -75,6 +75,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          order by number desc
          limit 0,4;
     </select>
+    <select id="selectOrdersByOrderNO" resultType="com.pet.manager.domain.Orders">
+        <include refid="selectOrdersVo"/>
+        where order_no = #{appointmentNo}
+    </select>
 
     <insert id="insertOrders" parameterType="Orders" useGeneratedKeys="true" keyProperty="orderId">
         insert into tb_orders
@@ -149,6 +153,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updatedBy != null">updated_by = #{updatedBy},</if>
         </trim>
         where order_id = #{orderId}
+    </update>
+    <update id="updateOrdersByOrderNo" parameterType="Orders">
+        update tb_orders
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderNo != null">order_no = #{orderNo},</if>
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="empId != null">emp_id = #{empId},</if>
+            <if test="serviceId != null">service_id = #{serviceId},</if>
+            <if test="serviceTypeCode != null">service_type_code = #{serviceTypeCode},</if>
+            <if test="serviceName != null and serviceName != ''">service_name = #{serviceName},</if>
+            <if test="roomType != null and roomType != ''">room_type = #{roomType},</if>
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="payStatus != null">pay_status = #{payStatus},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="addr != null">addr = #{addr},</if>
+            <if test="cancelInfo != null">cancel_info = #{cancelInfo},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="updatedBy != null">updated_by = #{updatedBy},</if>
+        </trim>
+        where order_no = #{orderNo}
     </update>
 
     <delete id="deleteOrdersByOrderId" parameterType="Long">
