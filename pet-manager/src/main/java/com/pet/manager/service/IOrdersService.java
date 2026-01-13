@@ -96,4 +96,11 @@ public interface IOrdersService
      * @return
      */
     ServicesTop10Vo getTop4(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * 支付
+     * @param orders
+     * @return
+     */
+    int pay(Orders orders);
 }

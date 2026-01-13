@@ -125,6 +125,17 @@ public class OrdersController extends BaseController
     }
 
     /**
+     * 订单支付
+     */
+    @ApiOperation("订单支付")
+    @PreAuthorize("@ss.hasPermi('manager:orders:edit')")
+    @Log(title = "订单管理", businessType = BusinessType.UPDATE)
+    @PostMapping("/pay")
+    public AjaxResult pay(@RequestBody Orders orders){
+        return toAjax(ordersService.pay(orders));
+    }
+
+    /**
      * 退款
      */
     @ApiOperation("退款")

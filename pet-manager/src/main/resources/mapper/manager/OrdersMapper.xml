@@ -39,6 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="orderType != null "> and order_type = #{orderType}</if>
             <if test="serviceName != null  and serviceName != ''"> and service_name like concat('%', #{serviceName}, '%')</if>
         </where>
+        order by created_at desc
     </select>
 
     <select id="selectOrdersByOrderId" parameterType="Long" resultMap="OrdersResult">

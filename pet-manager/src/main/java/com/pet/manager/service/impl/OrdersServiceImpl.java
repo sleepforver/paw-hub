@@ -192,6 +192,32 @@ public class OrdersServiceImpl implements IOrdersService
     }
 
     /**
+     * 支付
+     * @param orders
+     * @return
+     */
+    public int pay(Orders orders) {
+        //对前端传来的数据进行校验
+
+        //1.检查订单是否存在
+        Orders order = ordersMapper.selectOrdersByOrderId(orders.getOrderId());
+        if (order == null){
+            throw new ServiceException("订单不存在");
+        }
+        //2.进行订单状态校验
+        if (orders.getOrderStatus() != PawHubConstants.ORDER_STATUS_UNPAID && orders.getOrderStatus() != null){
+            throw new ServiceException("订单状态错误");
+        }
+        //3.检查支付金额与前端的支付金额是否一致
+        if(order.getAmount().equals(orders.getAmount().setScale(2)))
+        //4.设置订单的支付状态，时间
+        orders.setPayStatus(PawHubConstants.PAY_STATUS_PAID);
+        orders.setUpdateTime(new Date());
+        orders.setOrderStatus(PawHubConstants.ORDER_STATUS_PAID);
+        return ordersMapper.updateOrders(orders);
+    }
+
+    /**
      * 退款
      * @param orders
      * @return
