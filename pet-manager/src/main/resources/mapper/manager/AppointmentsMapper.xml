@@ -124,6 +124,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by created_at desc
     </select>
+    <select id="selectExpiredAppointments" resultType="com.pet.manager.domain.Appointments">
+        <include refid="selectAppointmentsVo"/>
+        where status = #{appointmentStatus}
+        and created_at &lt; #{expireTime}
+    </select>
 
     <insert id="insertAppointments" parameterType="Appointments" useGeneratedKeys="true" keyProperty="appointmentId">
         insert into tb_appointments

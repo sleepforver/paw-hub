@@ -1,6 +1,8 @@
 package com.pet.manager.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.pet.manager.domain.Appointments;
 import com.pet.manager.domain.vo.AppointmentsVo;
 import org.apache.ibatis.annotations.Select;
@@ -75,4 +77,10 @@ public interface AppointmentsMapper
      */
     @Select("select count(appointment_id) from tb_appointments where status = #{status};")
     Integer countStatus(Long status);
+
+    /**
+     * 查询过期的预约
+     * @param
+     */
+    List<Appointments> selectExpiredAppointments(Map<String, Object> params);
 }

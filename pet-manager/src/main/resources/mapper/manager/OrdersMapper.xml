@@ -80,6 +80,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectOrdersVo"/>
         where order_no = #{appointmentNo}
     </select>
+    <select id="selectExpiredOrders" resultType="com.pet.manager.domain.Orders">
+        <include refid="selectOrdersVo"/>
+        WHERE order_status = #{orderStatus}
+        AND appointment_time &lt; #{expiredDate}
+    </select>
+    <select id="selectTomorrowOrders" resultType="com.pet.manager.domain.Orders">
+        <include refid="selectOrdersVo"/>
+        WHERE created_at &gt;= #{startTime}
+        AND created_at &lt;= #{endTime}
+        AND order_status IN
+        <foreach collection="statusList" item="status" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+    </select>
 
     <insert id="insertOrders" parameterType="Orders" useGeneratedKeys="true" keyProperty="orderId">
         insert into tb_orders

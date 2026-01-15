@@ -88,4 +88,13 @@ public interface OrdersMapper
     List<ServicesTop4Dto> getServicesTop4(LocalDateTime begin, LocalDateTime end);
 
     Orders selectOrdersByOrderNO(String appointmentNo);
+
+    /**
+     * 查询过期的订单
+     * @param params
+     * @return
+     */
+    List<Orders> selectExpiredOrders(Map<String, Object> params);
+
+    List<Orders> selectTomorrowOrders(Map<String, Object> params);
 }
